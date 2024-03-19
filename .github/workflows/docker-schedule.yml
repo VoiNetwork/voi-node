@@ -1,0 +1,83 @@
+# This workflow is triggered by a scheduled event and builds and pushes a Docker image to the GitHub Container Registry.
+# Workflow exists to ensure that the image is rebuilt periodically to include most recent security updates.
+
+name: Daily Docker image build to include security updates
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  push_to_latest_release:
+    name: Push latest Docker image to registry based on last release version
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Get Current Release
+        id: get_current_release
+        uses: joutvhu/get-release@v1
+        with:
+          latest: true
+          pattern: '^v.*'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Filter version
+        id: filter_version
+        run: |
+          VERSION=$(echo "${{ steps.get_current_release.outputs.tag_name }}" | sed 's/^v//')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=edge,enable=true,priority=700,prefix=,suffix=,branch=$repo.default_branch
+
+      - name: Build and push Docker images latest
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            BASE_ALGORAND_VERSION=latest
+          push: true
+          tags: ghcr.io/voinetwork/docker-relay-node:latest
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            org.opencontainers.image.version=latest
+
+      - name: Build and push Docker images for current release
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            BASE_ALGORAND_VERSION=${{ env.VERSION }}-stable
+          push: true
+          tags: ghcr.io/voinetwork/docker-relay-node:${{ env.VERSION }}
+          labels: | 
+            ${{ steps.meta.outputs.labels }}
+            org.opencontainers.image.version=${{ env.VERSION }}
