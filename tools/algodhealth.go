@@ -11,7 +11,7 @@ func main() {
 		Timeout: time.Second * 5,
 	}
 
-	resp, err := client.Get("http://localhost:8080/health")
+	resp, err := client.Get("http://127.0.0.1:8080/health")
 	if err != nil {
 		os.Exit(1)
 	}
