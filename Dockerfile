@@ -11,8 +11,8 @@ RUN CGO_ENABLED=0 go build -o /dist/algodhealth ./algodhealth.go && \
 
 FROM gcr.io/distroless/cc as distroless
 ENV TELEMETRY_NAME="${HOSTNAME}"
-HEALTHCHECK --interval=30s --timeout=30s --start-period=20s \
-    CMD /node/bin/algodhealth || exit 1
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=20s CMD ["/node/bin/algodhealth"]
 
 COPY --from=algod --chown=0:0 /node/bin/algod /node/bin/algod
 COPY --from=algod --chown=0:0 /node/bin/goal /node/bin/goal
