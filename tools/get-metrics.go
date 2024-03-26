@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const NodeExporterListenAddress = "http://localhost:5011/metrics"
+const NodeExporterListenAddress = "http://relay:5011/metrics"
 
 func retrieveMetrics(dataDir *string) {
 	client := http.Client{
