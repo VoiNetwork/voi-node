@@ -8,7 +8,8 @@ COPY ./tools/ /src/
 RUN CGO_ENABLED=0 go build -o /dist/algodhealth ./algodhealth.go && \
     CGO_ENABLED=0 go build -o /dist/catch-catchpoint ./catch-catchpoint.go && \
     CGO_ENABLED=0 go build -o /dist/start-node ./start-node.go && \
-    CGO_ENABLED=0 go build -o /dist/get-metrics ./get-metrics.go
+    CGO_ENABLED=0 go build -o /dist/get-metrics ./get-metrics.go && \
+    CGO_ENABLED=0 go build -o /dist/start-metrics ./start-metrics.go
 
 FROM gcr.io/distroless/cc as distroless
 ENV TELEMETRY_NAME="${HOSTNAME}"

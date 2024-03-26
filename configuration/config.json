@@ -7,6 +7,5 @@
 	"DNSBootstrapID": "<network>.voi.network?backup=<network>.voinetwork.net&dedup=<name>.(voi.*?)\\.(network|net)",
 	"EnableMetricReporting": true,
 	"EnableLedgerService": true,
-	"EnableBlockService": true,
-	"NodeExporterListenAddress": "0.0.0.0:9100"
+	"EnableBlockService": true
 }

@@ -9,6 +9,28 @@ import (
 	"time"
 )
 
+func executeCommand(command string, args ...string) {
+	cmd := exec.Command(command, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		log.Fatalf("Failed to execute %s: %v", command, err)
+	}
+}
+
+func startProcess(command string, args ...string) chan bool {
+	done := make(chan bool)
+
+	go func() {
+		executeCommand(command, args...)
+		done <- true
+	}()
+
+	return done
+}
+
 func copyConfiguration(srcFile string, destFile string) error {
 	if _, err := os.Stat(destFile); os.IsNotExist(err) {
 		src, err := os.Open(srcFile)
@@ -35,28 +57,6 @@ func copyConfiguration(srcFile string, destFile string) error {
 		return err
 	}
 	return nil
-}
-
-func executeCommand(command string, args ...string) {
-	cmd := exec.Command(command, args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err := cmd.Run()
-	if err != nil {
-		log.Fatalf("Failed to execute %s: %v", command, err)
-	}
-}
-
-func startProcess(command string, args ...string) chan bool {
-	done := make(chan bool)
-
-	go func() {
-		executeCommand(command, args...)
-		done <- true
-	}()
-
-	return done
 }
 
 func main() {

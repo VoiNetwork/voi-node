@@ -10,17 +10,9 @@ import (
 	"time"
 )
 
-const NodeExporterListenAddress = "http://localhost:9100/metrics"
+const NodeExporterListenAddress = "http://localhost:5011/metrics"
 
-func main() {
-	dataDir := flag.String("d", "", "ALGORAND_DATA directory")
-	flag.Parse()
-
-	if *dataDir == "" {
-		fmt.Println("Error: -d parameter is required and should point to ALGORAND_DATA")
-		os.Exit(1)
-	}
-
+func retrieveMetrics(dataDir *string) {
 	client := http.Client{
 		Timeout: time.Second * 5,
 	}
@@ -30,7 +22,7 @@ func main() {
 		if err != nil {
 			fmt.Println("Error:", err)
 		} else {
-			filePath := filepath.Join(*dataDir, "metrics.log")
+			filePath := filepath.Join(*dataDir, "algod.prom")
 			file, err := os.Create(filePath)
 			if err != nil {
 				fmt.Println("Error creating file:", err)
@@ -43,7 +35,7 @@ func main() {
 				fmt.Println("Error writing to file:", err)
 				return
 			} else {
-				fmt.Printf("Successfully written %d bytes to file. HTTP status code: %d\n", bytesWritten, resp.StatusCode)
+				fmt.Printf("Successfully written %d bytes to %s. HTTP status code: %d\n", bytesWritten, filePath, resp.StatusCode)
 			}
 
 			resp.Body.Close()
@@ -52,4 +44,22 @@ func main() {
 		// Wait for 10 seconds before the next request
 		time.Sleep(10 * time.Second)
 	}
+}
+
+func main() {
+	dataDir := flag.String("d", "", "ALGORAND_DATA directory")
+	flag.Parse()
+
+	if *dataDir == "" {
+		fmt.Println("Error: -d parameter is required and should point to ALGORAND_DATA")
+		os.Exit(1)
+	}
+
+	err := os.MkdirAll(*dataDir, 0755)
+	if err != nil {
+		fmt.Println("Error creating directory:", err)
+		os.Exit(1)
+	}
+
+	retrieveMetrics(dataDir)
 }

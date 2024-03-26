@@ -28,9 +28,11 @@ func main() {
 		time.Sleep(10 * time.Second)
 	}
 
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil || resp == nil || resp.StatusCode != http.StatusOK {
 		fmt.Println("Error:", err)
-		fmt.Println("HTTP request failed with status:", resp.StatusCode)
+		if resp != nil {
+			fmt.Println("HTTP request failed with status:", resp.StatusCode)
+		}
 		return
 	}
 
