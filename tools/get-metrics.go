@@ -13,9 +13,13 @@ import (
 const NodeExporterListenAddress = "http://localhost:9100/metrics"
 
 func main() {
-	// Define and parse the -d flag
-	dataDir := flag.String("d", ".", "ALGORAND_DATA directory")
+	dataDir := flag.String("d", "", "ALGORAND_DATA directory")
 	flag.Parse()
+
+	if *dataDir == "" {
+		fmt.Println("Error: -d parameter is required and should point to ALGORAND_DATA")
+		os.Exit(1)
+	}
 
 	client := http.Client{
 		Timeout: time.Second * 5,
@@ -24,10 +28,8 @@ func main() {
 	for {
 		resp, err := client.Get(NodeExporterListenAddress)
 		if err != nil {
-			// Log the error and continue
 			fmt.Println("Error:", err)
 		} else {
-			// Create the metrics.log file in the provided directory
 			filePath := filepath.Join(*dataDir, "metrics.log")
 			file, err := os.Create(filePath)
 			if err != nil {
@@ -36,7 +38,6 @@ func main() {
 			}
 			defer file.Close()
 
-			// Copy the response body to the file
 			bytesWritten, err := io.Copy(file, resp.Body)
 			if err != nil {
 				fmt.Println("Error writing to file:", err)
@@ -45,7 +46,6 @@ func main() {
 				fmt.Printf("Successfully written %d bytes to file. HTTP status code: %d\n", bytesWritten, resp.StatusCode)
 			}
 
-			// Close the response body
 			resp.Body.Close()
 		}
 
