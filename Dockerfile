@@ -1,4 +1,4 @@
-ARG BASE_ALGORAND_VERSION="3.22.1-stable"
+ARG BASE_ALGORAND_VERSION="3.23.1-stable"
 FROM algorand/algod:$BASE_ALGORAND_VERSION as algod
 FROM urtho/algod-voitest-rly:latest as urtho
 
@@ -11,8 +11,11 @@ RUN CGO_ENABLED=0 go build -o /dist/algodhealth ./algodhealth.go && \
     CGO_ENABLED=0 go build -o /dist/get-metrics ./get-metrics.go && \
     CGO_ENABLED=0 go build -o /dist/start-metrics ./start-metrics.go
 
+# FROM ubuntu:22.04
 FROM gcr.io/distroless/cc as distroless
 ENV TELEMETRY_NAME="${HOSTNAME}"
+
+# RUN apt-get update && apt-get install -y curl ca-certificates
 
 HEALTHCHECK --interval=5s --timeout=10s --retries=3 --start-period=10s CMD ["/node/bin/algodhealth"]
 

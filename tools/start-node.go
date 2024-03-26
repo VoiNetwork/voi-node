@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -32,31 +34,28 @@ func startProcess(command string, args ...string) chan bool {
 }
 
 func copyConfiguration(srcFile string, destFile string) error {
-	if _, err := os.Stat(destFile); os.IsNotExist(err) {
-		src, err := os.Open(srcFile)
-		if err != nil {
-			return err
-		}
-		defer src.Close()
-
-		destDir := filepath.Dir(destFile)
-		if _, err := os.Stat(destDir); os.IsNotExist(err) {
-			err = os.MkdirAll(destDir, 0755)
-			if err != nil {
-				return err
-			}
-		}
-
-		dest, err := os.Create(destFile)
-		if err != nil {
-			return err
-		}
-		defer dest.Close()
-
-		_, err = io.Copy(dest, src)
+	src, err := os.Open(srcFile)
+	if err != nil {
 		return err
 	}
-	return nil
+	defer src.Close()
+
+	destDir := filepath.Dir(destFile)
+	if _, err := os.Stat(destDir); os.IsNotExist(err) {
+		err = os.MkdirAll(destDir, 0755)
+		if err != nil {
+			return err
+		}
+	}
+
+	dest, err := os.Create(destFile)
+	if err != nil {
+		return err
+	}
+	defer dest.Close()
+
+	_, err = io.Copy(dest, src)
+	return err
 }
 
 func main() {
@@ -68,6 +67,24 @@ func main() {
 	err = copyConfiguration("/algod/configuration/config.json", "/algod/data/config.json")
 	if err != nil {
 		log.Fatalf("Failed to copy config.json: %v", err)
+	}
+
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		fmt.Print(err)
+		return
+	}
+
+	for _, i := range interfaces {
+		addrs, err := i.Addrs()
+		if err != nil {
+			fmt.Print(err)
+			continue
+		}
+
+		for _, addr := range addrs {
+			fmt.Printf("Interface Name: %v, IP Address: %v\n", i.Name, addr.String())
+		}
 	}
 
 	// Start algod
