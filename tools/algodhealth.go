@@ -12,7 +12,14 @@ func main() {
 	cmd := exec.Command("/node/bin/goal", "node", "status", "-d", "/algod/data")
 	err1 := cmd.Run()
 
+	hostname, err := os.Hostname()
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+
 	if err1 == nil {
+		fmt.Printf("Algod healthcheck passed on host: %s", hostname)
 		os.Exit(0)
 	}
 
@@ -31,6 +38,6 @@ func main() {
 		fmt.Printf("Error: HTTP request failed with status: %d\n", resp.StatusCode)
 		os.Exit(1)
 	} else {
-		fmt.Printf("Algod healthcheck passed.")
+		fmt.Printf("Algod healthcheck passed on host: %s", hostname)
 	}
 }
