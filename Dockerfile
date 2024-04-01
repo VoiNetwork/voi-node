@@ -11,11 +11,11 @@ RUN CGO_ENABLED=0 go build -o /dist/algodhealth ./algodhealth.go && \
     CGO_ENABLED=0 go build -o /dist/get-metrics ./get-metrics.go && \
     CGO_ENABLED=0 go build -o /dist/start-metrics ./start-metrics.go
 
-# FROM ubuntu:22.04
-FROM gcr.io/distroless/cc as distroless
+FROM ubuntu:22.04
+# FROM gcr.io/distroless/cc as distroless
 ENV TELEMETRY_NAME="${HOSTNAME}"
 
-# RUN apt-get update && apt-get install -y curl ca-certificates
+RUN apt-get update && apt-get install -y curl ca-certificates
 
 HEALTHCHECK --interval=5s --timeout=10s --retries=3 --start-period=10s CMD ["/node/bin/algodhealth"]
 
