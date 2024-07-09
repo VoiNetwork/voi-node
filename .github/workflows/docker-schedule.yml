@@ -61,8 +61,6 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          build-args: |
-            BASE_ALGORAND_VERSION=latest
           push: true
           tags: ghcr.io/voinetwork/docker-relay-node:latest
           labels: |
