@@ -1,0 +1,13 @@
+{
+  "Version": 33,
+  "Archival": false,
+  "GossipFanout": 8,
+  "NetAddress": "0.0.0.0:8080",
+  "MaxConnectionsPerIP": 2,
+  "IncomingConnectionsLimit": 90,
+  "MaxBlockHistoryLookback": 22000,
+  "DNSBootstrapID": "<network>.voi.network?backup=<network>.voinetwork.net&dedup=<name>.(voi.*?)\\.(network|net)",
+  "EnableMetricReporting": true,
+  "EnableLedgerService": true,
+  "EnableBlockService": true
+}
