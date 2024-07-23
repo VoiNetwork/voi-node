@@ -3,9 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/voinetwork/docker-relay-node/tools/utils"
+	"github.com/voinetwork/voi-node/tools/utils"
 	"log"
-	"net"
 	"os"
 	"time"
 )
@@ -29,6 +28,29 @@ func init() {
 	flag.BoolVar(&overwriteConfig, "overwrite-config", true, "Specify whether to overwrite the configuration files (true, false)")
 }
 
+func handleConfiguration(urlSet bool, genesisURL, network, profile string, overwriteConfig bool, genesisJSONPathFmt, configJSONPathFmt, algodDataDir string) {
+	fu := utils.FileUtils{}
+	nu := utils.NetworkUtils{}
+
+	if urlSet {
+		log.Printf("Using genesis and configuration URLs from environment variables: %s", genesisURL)
+		if err := nu.DownloadNetworkConfiguration(genesisURL, algodDataDir); err != nil {
+			fmt.Printf("Failed to download network configuration: %v", err)
+			os.Exit(1)
+		}
+	} else {
+		if err := fu.CopyGenesisConfigurationFromFilesystem(network, profile, overwriteConfig, genesisJSONPathFmt, algodDataDir); err != nil {
+			fmt.Printf("Failed to copy network configuration: %v", err)
+			os.Exit(1)
+		}
+	}
+
+	if err := fu.CopyAlgodConfigurationFromFilesystem(network, profile, overwriteConfig, configJSONPathFmt, algodDataDir); err != nil {
+		fmt.Printf("Failed to copy network configuration: %v", err)
+		os.Exit(1)
+	}
+}
+
 func main() {
 	flag.Parse()
 
@@ -40,48 +62,18 @@ func main() {
 		network = envNetwork
 	}
 
-	interfaces, err := net.Interfaces()
-	if err != nil {
-		fmt.Print(err)
-		return
+	genesisURL, urlSet := nu.GetGenesisFromEnv()
+
+	envProfile, profileSet := nu.GetProfileFromEnv()
+	if profileSet {
+		profile = envProfile
 	}
-
-	for _, i := range interfaces {
-		addrs, err := i.Addrs()
-		if err != nil {
-			fmt.Print(err)
-			continue
-		}
-
-		for _, addr := range addrs {
-			fmt.Printf("Interface Name: %v, IP Address: %v\n", i.Name, addr.String())
-		}
-	}
-
-	// Copy configuration for the network
-	genesisURL, configURL, urlSet := nu.GetGenesisAndConfigurationFromEnv()
 
 	log.Printf("Network: %s", network)
-	if !urlSet {
-		log.Printf("Profile: %s", profile)
-	}
+	log.Printf("Profile: %s", profile)
 	log.Printf("Overwrite Config: %t", overwriteConfig)
 
-	if urlSet {
-		log.Printf("Using genesis and configuration URLs from environment variables: %s, %s", genesisURL, configURL)
-		err := nu.DownloadNetworkConfiguration(genesisURL, configURL, algodDataDir)
-		if err != nil {
-			fmt.Printf("Failed to download network configuration: %v", err)
-			os.Exit(1)
-		}
-	} else {
-		fu := utils.FileUtils{}
-		err := fu.CopyNetworkConfigurationFromFilesystem(network, profile, overwriteConfig, genesisJSONPathFmt, configJSONPathFmt, algodDataDir)
-		if err != nil {
-			fmt.Printf("Failed to copy network configuration: %v", err)
-			os.Exit(1)
-		}
-	}
+	handleConfiguration(urlSet, genesisURL, network, profile, overwriteConfig, genesisJSONPathFmt, configJSONPathFmt, algodDataDir)
 
 	pu := utils.ProcessUtils{}
 

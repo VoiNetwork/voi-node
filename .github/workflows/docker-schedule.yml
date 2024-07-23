@@ -64,7 +64,7 @@ jobs:
           build-args: |
             BASE_ALGORAND_VERSION=3.25.0-stable
           push: true
-          tags: ghcr.io/voinetwork/docker-relay-node:latest
+          tags: ghcr.io/voinetwork/voi-node:latest
           labels: |
             ${{ steps.meta.outputs.labels }}
             org.opencontainers.image.version=latest

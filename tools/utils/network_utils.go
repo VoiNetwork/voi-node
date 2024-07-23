@@ -10,10 +10,10 @@ import (
 )
 
 const (
-	testNet                = "testnet"
-	envNetworkVar          = "VOINETWORK_NETWORK"
-	envGenesisURLVar       = "VOINETWORK_GENESIS"
-	envConfigurationURLVar = "VOINETWORK_CONFIGURATION"
+	testNet          = "testnet"
+	envNetworkVar    = "VOINETWORK_NETWORK"
+	envGenesisURLVar = "VOINETWORK_GENESIS"
+	envProfileVar    = "VOINETWORK_PROFILE"
 )
 
 type NetworkUtils struct{}
@@ -24,6 +24,15 @@ func (nu NetworkUtils) GetStatusURL(network string) (string, error) {
 		return "https://testnet-api.voi.nodly.io/v2/status", nil
 	default:
 		return "", fmt.Errorf("unsupported network: %s", network)
+	}
+}
+
+func (nu NetworkUtils) CheckIfPredefinedNetwork(network string) bool {
+	switch network {
+	case testNet:
+		return true
+	default:
+		return false
 	}
 }
 
@@ -40,22 +49,30 @@ func (nu NetworkUtils) GetNetworkFromEnv() (string, bool) {
 	return "", false
 }
 
-func (nu NetworkUtils) GetGenesisAndConfigurationFromEnv() (string, string, bool) {
-	genesisURL := os.Getenv(envGenesisURLVar)
-	configurationURL := os.Getenv(envConfigurationURLVar)
-	if genesisURL != "" && configurationURL != "" {
-		return genesisURL, configurationURL, true
-	}
-	return "", "", false
+func (nu NetworkUtils) GetEnvProfileVar() string {
+	return envProfileVar
 }
 
-func (nu NetworkUtils) DownloadNetworkConfiguration(genesisURL, configURL string, algodDataDir string) error {
+func (nu NetworkUtils) GetProfileFromEnv() (string, bool) {
+	profile := os.Getenv(envProfileVar)
+	if profile != "" {
+		log.Printf("Using profile from environment variable: %s", profile)
+		return profile, true
+	}
+	return "", false
+}
+
+func (nu NetworkUtils) GetGenesisFromEnv() (string, bool) {
+	genesisURL := os.Getenv(envGenesisURLVar)
+	if genesisURL != "" {
+		return genesisURL, true
+	}
+	return "", false
+}
+
+func (nu NetworkUtils) DownloadNetworkConfiguration(genesisURL, algodDataDir string) error {
 	if err := downloadFile(genesisURL, filepath.Join(algodDataDir, "genesis.json")); err != nil {
 		return fmt.Errorf("failed to download genesis.json: %w", err)
-	}
-
-	if err := downloadFile(configURL, filepath.Join(algodDataDir, "config.json")); err != nil {
-		return fmt.Errorf("failed to download config.json: %w", err)
 	}
 
 	return nil

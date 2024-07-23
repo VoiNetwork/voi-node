@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"github.com/voinetwork/docker-relay-node/tools/utils"
+	"github.com/voinetwork/voi-node/tools/utils"
 	"io"
 	"log"
 	"math"

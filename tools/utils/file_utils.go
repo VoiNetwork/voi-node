@@ -65,15 +65,23 @@ func (fu FileUtils) WriteToFile(filePath string, data io.Reader, statusCode int)
 	return nil
 }
 
-func (fu FileUtils) CopyNetworkConfigurationFromFilesystem(network string, profile string, overWriteConfig bool, genesisJSONPathFmt string, configJSONPathFmt string, algodDataDir string) error {
+func (fu FileUtils) CopyAlgodConfigurationFromFilesystem(network string, profile string, overWriteConfig bool, configJSONPathFmt string, algodDataDir string) error {
+	nu := NetworkUtils{}
+	if !nu.CheckIfPredefinedNetwork(network) {
+		network = "testnet"
+	}
+
+	err := fu.CopyFile(fmt.Sprintf(configJSONPathFmt, network, profile), algodDataDir+"/config.json", overWriteConfig)
+	if err != nil {
+		return fmt.Errorf("failed to copy config.json: %v", err)
+	}
+	return nil
+}
+
+func (fu FileUtils) CopyGenesisConfigurationFromFilesystem(network string, profile string, overWriteConfig bool, genesisJSONPathFmt string, algodDataDir string) error {
 	err := fu.CopyFile(fmt.Sprintf(genesisJSONPathFmt, network), algodDataDir+"/genesis.json", overWriteConfig)
 	if err != nil {
 		return fmt.Errorf("failed to copy genesis.json: %v", err)
-	}
-
-	err = fu.CopyFile(fmt.Sprintf(configJSONPathFmt, network, profile), algodDataDir+"/config.json", overWriteConfig)
-	if err != nil {
-		return fmt.Errorf("failed to copy config.json: %v", err)
 	}
 	return nil
 }

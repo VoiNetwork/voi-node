@@ -1,3 +1,3 @@
-module github.com/voinetwork/docker-relay-node
+module github.com/voinetwork/voi-node
 
 go 1.22

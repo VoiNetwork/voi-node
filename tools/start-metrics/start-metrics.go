@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/voinetwork/docker-relay-node/tools/utils"
+	"github.com/voinetwork/voi-node/tools/utils"
 	"log"
 	"net"
 	"time"
