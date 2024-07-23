@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"testing"
 )
@@ -99,7 +98,7 @@ func TestWriteToFile(t *testing.T) {
 	fu := FileUtils{}
 
 	// Test WriteToFile success
-	err := fu.WriteToFile(filePath, mockReader, 200)
+	err := fu.WriteToFile(filePath, mockReader)
 	if err != nil {
 		t.Errorf("WriteToFile failed: %v", err)
 	}
@@ -113,19 +112,9 @@ func TestWriteToFile(t *testing.T) {
 		t.Errorf("File content mismatch: got %v, want %v", string(content), mockData)
 	}
 
-	// Verify log output
-	expectedLogPattern := `Successfully written 9 bytes to ` + regexp.QuoteMeta(filePath) + `\. HTTP status code: 200\n`
-	matched, err := regexp.MatchString(expectedLogPattern, logOutput.String())
-	if err != nil {
-		t.Fatalf("Regex match error: %v", err)
-	}
-	if !matched {
-		t.Errorf("Log output mismatch: expected to match %v", expectedLogPattern)
-	}
-
 	// Test WriteToFile failure with invalid path
 	invalidPath := "/invalid/path"
-	err = fu.WriteToFile(invalidPath, mockReader, 400)
+	err = fu.WriteToFile(invalidPath, mockReader)
 	if err == nil {
 		t.Errorf("Expected WriteToFile to fail with invalid path")
 	}

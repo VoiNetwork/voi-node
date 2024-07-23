@@ -13,9 +13,18 @@ Node configuration will use testnet defaults unless otherwise provided at image 
 ## Running a Voi node
 
 ### Running with default settings
+
+```bash
 docker run ghcr.io/voinetwork/voi-node:latest
+```
 
 This will run a relay node on the testnet network.
+
+### Running with a configuration value override
+
+```bash
+docker run -e VOINETWORK_INCOMING_CONNECTIONS_LIMIT=30 ghcr.io/voinetwork/voi-node:latest 
+```
 
 ### Running with a pre-defined network
 To run a Voi node with a pre-defined network, you can use the following command:
@@ -29,6 +38,7 @@ docker run -e VOINETWORK_NETWORK=testnet ghcr.io/voinetwork/voi-node:latest
 ```bash
 docker run -e VOINETWORK_NETWORK=custom_name -e VOINETWORK_GENESIS=custom_url ghcr.io/voinetwork/voi-node:latest
 ```
+
 
 ### Running with a specific profile
 

@@ -94,7 +94,7 @@ func downloadFile(url, destFile string) error {
 	}
 
 	fu := FileUtils{}
-	err = fu.EnsureDirExists(filepath.Dir(destFile))
+	err = fu.EnsureDirExists(destFile)
 	if err != nil {
 		return err
 	}

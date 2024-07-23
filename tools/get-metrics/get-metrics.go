@@ -44,7 +44,7 @@ func fetchAndStoreMetrics(dataDir string) error {
 	filePath := filepath.Join(dataDir, "algod.prom")
 	fu := utils.FileUtils{}
 
-	return fu.WriteToFile(filePath, resp.Body, resp.StatusCode)
+	return fu.WriteToFile(filePath, resp.Body)
 }
 
 func main() {

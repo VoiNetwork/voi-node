@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/voinetwork/voi-node/tools/utils"
 	"log"
 	"os"
@@ -10,12 +9,10 @@ import (
 )
 
 const (
-	envCatchupVar      = "VOINETWORK_CATCHUP"
-	genesisJSONPathFmt = "/algod/configuration/%s/genesis.json"
-	configJSONPathFmt  = "/algod/configuration/%s/%s/config.json"
-	algodDataDir       = "/algod/data"
-	algodCmd           = "/node/bin/algod"
-	catchupCmd         = "/node/bin/catch-catchpoint"
+	envCatchupVar = "VOINETWORK_CATCHUP"
+	algodDataDir  = "/algod/data"
+	algodCmd      = "/node/bin/algod"
+	catchupCmd    = "/node/bin/catch-catchpoint"
 )
 
 var network string
@@ -26,29 +23,6 @@ func init() {
 	flag.StringVar(&network, "network", "testnet", "Specify the network (testnet)")
 	flag.StringVar(&profile, "profile", "relay", "Specify the profile (archiver, relay)")
 	flag.BoolVar(&overwriteConfig, "overwrite-config", true, "Specify whether to overwrite the configuration files (true, false)")
-}
-
-func handleConfiguration(urlSet bool, genesisURL, network, profile string, overwriteConfig bool, genesisJSONPathFmt, configJSONPathFmt, algodDataDir string) {
-	fu := utils.FileUtils{}
-	nu := utils.NetworkUtils{}
-
-	if urlSet {
-		log.Printf("Using genesis and configuration URLs from environment variables: %s", genesisURL)
-		if err := nu.DownloadNetworkConfiguration(genesisURL, algodDataDir); err != nil {
-			fmt.Printf("Failed to download network configuration: %v", err)
-			os.Exit(1)
-		}
-	} else {
-		if err := fu.CopyGenesisConfigurationFromFilesystem(network, profile, overwriteConfig, genesisJSONPathFmt, algodDataDir); err != nil {
-			fmt.Printf("Failed to copy network configuration: %v", err)
-			os.Exit(1)
-		}
-	}
-
-	if err := fu.CopyAlgodConfigurationFromFilesystem(network, profile, overwriteConfig, configJSONPathFmt, algodDataDir); err != nil {
-		fmt.Printf("Failed to copy network configuration: %v", err)
-		os.Exit(1)
-	}
 }
 
 func main() {
@@ -73,7 +47,8 @@ func main() {
 	log.Printf("Profile: %s", profile)
 	log.Printf("Overwrite Config: %t", overwriteConfig)
 
-	handleConfiguration(urlSet, genesisURL, network, profile, overwriteConfig, genesisJSONPathFmt, configJSONPathFmt, algodDataDir)
+	cu := utils.ConfigUtils{}
+	cu.HandleConfiguration(urlSet, genesisURL, network, profile, overwriteConfig, algodDataDir)
 
 	pu := utils.ProcessUtils{}
 
