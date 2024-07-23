@@ -9,7 +9,10 @@ import (
 	"path/filepath"
 )
 
+// TODO: Separate network io from blockchain network
+
 const (
+	// TODO: Create an enum to hold predefined network values
 	testNet          = "testnet"
 	envNetworkVar    = "VOINETWORK_NETWORK"
 	envGenesisURLVar = "VOINETWORK_GENESIS"
@@ -49,6 +52,7 @@ func (nu NetworkUtils) GetNetworkFromEnv() (string, bool) {
 	return "", false
 }
 
+// TODO: Remove duplication by extracting the common code to a function
 func (nu NetworkUtils) GetEnvProfileVar() string {
 	return envProfileVar
 }
