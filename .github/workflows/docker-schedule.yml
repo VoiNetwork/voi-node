@@ -62,22 +62,9 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           build-args: |
-            BASE_ALGORAND_VERSION=${{ env.VERSION }}-stable
+            BASE_ALGORAND_VERSION=3.25.0-stable
           push: true
           tags: ghcr.io/voinetwork/docker-relay-node:latest
           labels: |
             ${{ steps.meta.outputs.labels }}
             org.opencontainers.image.version=latest
-
-      - name: Build and push Docker images for current release
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          build-args: |
-            BASE_ALGORAND_VERSION=${{ env.VERSION }}-stable
-          push: true
-          tags: ghcr.io/voinetwork/docker-relay-node:${{ env.VERSION }}
-          labels: | 
-            ${{ steps.meta.outputs.labels }}
-            org.opencontainers.image.version=${{ env.VERSION }}
