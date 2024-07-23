@@ -32,7 +32,7 @@ func TestGetStatusURL(t *testing.T) {
 	}
 }
 
-func TestNetworkUtils_GetEnvNetworkVar(t *testing.T) {
+func TestGetEnvNetworkVar(t *testing.T) {
 	expected := envNetworkVar
 	nu := NetworkUtils{}
 	if got := nu.GetEnvNetworkVar(); got != expected {
@@ -40,7 +40,7 @@ func TestNetworkUtils_GetEnvNetworkVar(t *testing.T) {
 	}
 }
 
-func TestNetworkUtils_GetNetworkFromEnv(t *testing.T) {
+func TestGetNetworkFromEnv(t *testing.T) {
 	nu := NetworkUtils{}
 
 	// Test with environment variable set

@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -38,7 +37,10 @@ func TestCopyFile(t *testing.T) {
 
 	t.Run("No copy when forceOverwrite is false and destination exists", func(t *testing.T) {
 		destFile := filepath.Join(os.TempDir(), "destFileExists")
-		os.WriteFile(destFile, []byte("Existing content"), 0644)
+		err := os.WriteFile(destFile, []byte("Existing content"), 0644)
+		if err != nil {
+			return
+		}
 		defer os.Remove(destFile)
 
 		fu := FileUtils{}
@@ -82,13 +84,9 @@ func verifyFileContent(t *testing.T, filePath string, expectedContent []byte) {
 	}
 }
 
-func TestFileUtils_WriteToFile(t *testing.T) {
+func TestWriteToFile(t *testing.T) {
 	// Setup test environment
-	tempDir, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("Failed to create temp dir: %v", err)
-	}
-	defer os.RemoveAll(tempDir)
+	tempDir := os.TempDir()
 
 	mockData := "test data"
 	mockReader := strings.NewReader(mockData)
@@ -101,13 +99,13 @@ func TestFileUtils_WriteToFile(t *testing.T) {
 	fu := FileUtils{}
 
 	// Test WriteToFile success
-	err = fu.WriteToFile(filePath, mockReader, 200)
+	err := fu.WriteToFile(filePath, mockReader, 200)
 	if err != nil {
 		t.Errorf("WriteToFile failed: %v", err)
 	}
 
 	// Verify file content
-	content, err := ioutil.ReadFile(filePath)
+	content, err := os.ReadFile(filePath)
 	if err != nil {
 		t.Fatalf("Failed to read file: %v", err)
 	}
