@@ -14,23 +14,23 @@ Node configuration will use testnet defaults unless otherwise provided at image 
 To run a Voi node with a pre-defined network, you can use the following command:
 
 ```bash
-docker run -e VOINETWORK_NETWORK=testnet ghcr.io/voi-network/voi-node:latest
+docker run -e VOINETWORK_NETWORK=testnet ghcr.io/voinetwork/voi-node:latest
 ```
 
 ## Running with a custom network
 
 ```bash
-docker run -e VOINETWORK_NETWORK=custom_name -e VOINETWORK_GENESIS=custom_url ghcr.io/voi-network/voi-node:latest
+docker run -e VOINETWORK_NETWORK=custom_name -e VOINETWORK_GENESIS=custom_url ghcr.io/voinetwork/voi-node:latest
 ```
 
 ## Running with a specific profile
 
 ### Relay node
 ```bash
-docker run -e VOINETWORK_NETWORK=custom_name -e VOINETWORK_GENESIS=custom_url -e VOINETWORK_PROFILE=relay ghcr.io/voi-network/voi-node:latest
+docker run -e VOINETWORK_NETWORK=custom_name -e VOINETWORK_GENESIS=custom_url -e VOINETWORK_PROFILE=relay ghcr.io/voinetwork/voi-node:latest
 ```
 
 ### Archiver node
 ```bash
-docker run -e VOINETWORK_NETWORK=custom_name -e VOINETWORK_GENESIS=custom_url -e VOINETWORK_PROFILE=archiver ghcr.io/voi-network/voi-node:latest
+docker run -e VOINETWORK_NETWORK=custom_name -e VOINETWORK_GENESIS=custom_url -e VOINETWORK_PROFILE=archiver ghcr.io/voinetwork/voi-node:latest
 ```
