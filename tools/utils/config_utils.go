@@ -16,9 +16,6 @@ const (
 )
 
 type ConfigUtils struct{}
-type AlgodConfig struct {
-	IncomingConnectionsLimit int `json:"IncomingConnectionsLimit,omitempty"`
-}
 
 func (cu ConfigUtils) HandleConfiguration(urlSet bool, genesisURL string, network string, profile string, overwriteConfig bool, algodDataDir string) {
 	fu := FileUtils{}
@@ -56,6 +53,10 @@ func (cu ConfigUtils) HandleConfiguration(urlSet bool, genesisURL string, networ
 }
 
 func overrideConfigurationVariable(configPath, key, value string) error {
+	if value == "" {
+		return nil
+	}
+
 	configFile, err := os.ReadFile(configPath)
 	if err != nil {
 		return fmt.Errorf("failed to read config file: %v", err)
@@ -66,13 +67,19 @@ func overrideConfigurationVariable(configPath, key, value string) error {
 		return fmt.Errorf("failed to parse config JSON: %v", err)
 	}
 
-	intValue, err := strconv.Atoi(value)
-	if err == nil {
-		config[key] = intValue
-		log.Printf("Overwriting integer value for %s: %d", key, intValue)
+	if value == "true" || value == "false" {
+		boolValue := value == "true"
+		config[key] = boolValue
+		log.Printf("Overwriting boolean value for %s: %t", key, boolValue)
 	} else {
-		config[key] = value
-		log.Printf("Overwriting string value for %s: %s", key, value)
+		intValue, err := strconv.Atoi(value)
+		if err == nil {
+			config[key] = intValue
+			log.Printf("Overwriting integer value for %s: %d", key, intValue)
+		} else {
+			config[key] = value
+			log.Printf("Overwriting string value for %s: %s", key, value)
+		}
 	}
 
 	modifiedConfig, err := json.MarshalIndent(config, "", "    ")
