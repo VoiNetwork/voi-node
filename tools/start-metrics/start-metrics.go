@@ -71,7 +71,7 @@ func main() {
 	}
 
 	log.Printf("Node exporter started successfully")
-	log.Printf("Starting get-metrics")
+	log.Printf("Starting collection of Algod metrics")
 
 	if err := executeGetMetrics(pu); err != nil {
 		log.Fatalf("Error running get-metrics: %v", err)
