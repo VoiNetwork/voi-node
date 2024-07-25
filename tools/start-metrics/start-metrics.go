@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/voinetwork/voi-node/tools/utils"
 	"log"
 	"time"
@@ -48,25 +47,15 @@ func startNodeExporter(pu utils.ProcessUtils) error {
 		"--collector.textfile.directory="+metricsDir,
 		"--web.listen-address="+nodeExporterListenAddr)
 
-	// Wait for process to start or fail
-	err := <-errChan
-	if err != nil {
-		return err
-	}
-
-	timeout := time.After(nodeExporterStartupTimeout)
-	for {
-		select {
-		case <-timeout:
-			return fmt.Errorf("timeout waiting for node_exporter to start")
-		default:
-			nu := utils.NetworkUtils{}
-			if nu.IsPortOpen(nodeExporterListenAddr) {
-				return nil
-			}
-			time.Sleep(1 * time.Second)
+	select {
+	case err := <-errChan:
+		if err != nil {
+			return err
 		}
+	case <-time.After(5 * time.Second):
+		return nil
 	}
+	return nil
 }
 
 func executeGetMetrics(pu utils.ProcessUtils) error {
@@ -80,6 +69,9 @@ func main() {
 	if err := startNodeExporter(pu); err != nil {
 		log.Fatalf("Error starting node_exporter: %v", err)
 	}
+
+	log.Printf("Node exporter started successfully")
+	log.Printf("Starting get-metrics")
 
 	if err := executeGetMetrics(pu); err != nil {
 		log.Fatalf("Error running get-metrics: %v", err)

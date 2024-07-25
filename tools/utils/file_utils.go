@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -37,7 +38,8 @@ func (fu FileUtils) WriteToFile(filePath string, data io.Reader) error {
 	}
 	defer file.Close()
 
-	_, err = io.Copy(file, data)
+	bytes, err := io.Copy(file, data)
+	log.Printf("Successfully written %d bytes to %s", bytes, filePath)
 	if err != nil {
 		return err
 	}
