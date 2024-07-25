@@ -55,14 +55,21 @@ func main() {
 	// Start algod
 	done := pu.StartProcess(algodCmd, "-d", algodDataDir)
 
-	// Wait for algod to start
-	time.Sleep(5 * time.Second)
-
 	envVar := os.Getenv(envCatchupVar)
 	if envVar != "0" && !urlSet {
-		// Execute catch-catchpoint
-		_, err := pu.ExecuteCommand(catchupCmd)
-		if err != nil {
+		retryCount := 0
+		maxRetries := 10
+		for retryCount < maxRetries {
+			_, err := pu.ExecuteCommand(catchupCmd)
+			if err == nil {
+				break
+			}
+			retryCount++
+			log.Printf("Retry %d/%d: Failed to execute catchup command, retrying in 5 seconds...", retryCount, maxRetries)
+			time.Sleep(5 * time.Second)
+		}
+		if retryCount == maxRetries {
+			log.Printf("Failed to execute catchup command after %d retries", maxRetries)
 			return
 		}
 	} else {

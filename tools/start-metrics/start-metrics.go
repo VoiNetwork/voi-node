@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/voinetwork/voi-node/tools/utils"
 	"log"
-	"net"
 	"time"
 )
 
@@ -13,18 +12,8 @@ const (
 	getMetricsCmd              = "/node/bin/get-metrics"
 	metricsDir                 = "/algod/metrics"
 	nodeExporterListenAddr     = "0.0.0.0:8080"
-	nodeExporterStartTimeout   = 5 * time.Second
 	nodeExporterStartupTimeout = 30 * time.Second
 )
-
-func isPortOpen(address string) bool {
-	conn, err := net.DialTimeout("tcp", address, nodeExporterStartTimeout)
-	if err != nil {
-		return false
-	}
-	conn.Close()
-	return true
-}
 
 func startNodeExporter(pu utils.ProcessUtils) error {
 	errChan := pu.StartProcess(nodeExporterCmd,
@@ -71,7 +60,8 @@ func startNodeExporter(pu utils.ProcessUtils) error {
 		case <-timeout:
 			return fmt.Errorf("timeout waiting for node_exporter to start")
 		default:
-			if isPortOpen(nodeExporterListenAddr) {
+			nu := utils.NetworkUtils{}
+			if nu.IsPortOpen(nodeExporterListenAddr) {
 				return nil
 			}
 			time.Sleep(1 * time.Second)

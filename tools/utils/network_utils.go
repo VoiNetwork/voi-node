@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 // TODO: Separate network io from blockchain network
@@ -20,6 +22,15 @@ const (
 )
 
 type NetworkUtils struct{}
+
+func (nu NetworkUtils) IsPortOpen(address string) bool {
+	conn, err := net.DialTimeout("tcp", address, 5*time.Second)
+	if err != nil {
+		return false
+	}
+	conn.Close()
+	return true
+}
 
 func (nu NetworkUtils) GetStatusURL(network string) (string, error) {
 	switch network {
