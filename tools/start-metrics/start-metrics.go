@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/voinetwork/voi-node/tools/utils"
 	"log"
 	"net"
@@ -8,15 +9,16 @@ import (
 )
 
 const (
-	nodeExporterCmd          = "/node/bin/node_exporter"
-	getMetricsCmd            = "/node/bin/get-metrics"
-	metricsDir               = "/algod/metrics"
-	nodeExporterListenAddr   = ":8080"
-	nodeExporterStartTimeout = 5 * time.Second
+	nodeExporterCmd            = "/node/bin/node_exporter"
+	getMetricsCmd              = "/node/bin/get-metrics"
+	metricsDir                 = "/algod/metrics"
+	nodeExporterListenAddr     = "0.0.0.0:8080"
+	nodeExporterStartTimeout   = 5 * time.Second
+	nodeExporterStartupTimeout = 30 * time.Second
 )
 
-func isPortOpen(port string) bool {
-	conn, err := net.DialTimeout("tcp", port, nodeExporterStartTimeout)
+func isPortOpen(address string) bool {
+	conn, err := net.DialTimeout("tcp", address, nodeExporterStartTimeout)
 	if err != nil {
 		return false
 	}
@@ -63,11 +65,18 @@ func startNodeExporter(pu utils.ProcessUtils) error {
 		return err
 	}
 
-	// Wait for node_exporter to start
-	for !isPortOpen(nodeExporterListenAddr) {
-		time.Sleep(1 * time.Second)
+	timeout := time.After(nodeExporterStartupTimeout)
+	for {
+		select {
+		case <-timeout:
+			return fmt.Errorf("timeout waiting for node_exporter to start")
+		default:
+			if isPortOpen(nodeExporterListenAddr) {
+				return nil
+			}
+			time.Sleep(1 * time.Second)
+		}
 	}
-	return nil
 }
 
 func executeGetMetrics(pu utils.ProcessUtils) error {
