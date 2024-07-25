@@ -15,13 +15,13 @@ const (
 	httpRetryInterval         = 10 * time.Second
 )
 
-var algorandDataDir string
+var metricsDir string
 var httpClient = &http.Client{
 	Timeout: 5 * time.Second,
 }
 
 func init() {
-	flag.StringVar(&algorandDataDir, "d", "", "Specify the ALGORAND_DATA directory")
+	flag.StringVar(&metricsDir, "d", "", "Specify the metrics directory")
 }
 
 func retrieveMetrics(dataDir string) error {
@@ -50,18 +50,18 @@ func fetchAndStoreMetrics(dataDir string) error {
 func main() {
 	flag.Parse()
 
-	if algorandDataDir == "" {
-		log.Println("Error: -d parameter is required and should point to ALGORAND_DATA")
+	if metricsDir == "" {
+		log.Println("Error: -d parameter is required and should point to metrics directory")
 		os.Exit(1)
 	}
 
-	err := os.MkdirAll(algorandDataDir, 0755)
+	err := os.MkdirAll(metricsDir, 0755)
 	if err != nil {
 		log.Println("Error creating directory:", err)
 		os.Exit(1)
 	}
 
-	if err := retrieveMetrics(algorandDataDir); err != nil {
+	if err := retrieveMetrics(metricsDir); err != nil {
 		log.Println("Error retrieving metrics:", err)
 		os.Exit(1)
 	}
