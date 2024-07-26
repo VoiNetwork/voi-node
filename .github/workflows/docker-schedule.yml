@@ -62,7 +62,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           build-args: |
-            BASE_ALGORAND_VERSION=3.25.0-stable
+            BASE_ALGORAND_VERSION=3.25.0
           push: true
           tags: ghcr.io/voinetwork/voi-node:latest
           labels: |

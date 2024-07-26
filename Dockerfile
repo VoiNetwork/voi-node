@@ -23,4 +23,4 @@ COPY --from=algorand --chown=0:0 /root/node/node_exporter /node/bin/node_exporte
 COPY --from=builder /build/ /node/bin/
 COPY configuration /algod/configuration
 
-CMD ["/node/bin/start-metrics"]
+CMD ["/node/bin/start-node"]
