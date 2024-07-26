@@ -1,6 +1,6 @@
-ARG BASE_ALGORAND_VERSION="3.25.0-stable"
-FROM algorand/algod:$BASE_ALGORAND_VERSION AS algod
-FROM urtho/algod-voitest-rly:latest AS urtho
+ARG BASE_ALGORAND_VERSION="3.25.0"
+FROM algorand/algod:${BASE_ALGORAND_VERSION}-stable AS algod
+FROM algorand/stable:${BASE_ALGORAND_VERSION} AS algorand
 
 FROM golang:1.22 AS builder
 WORKDIR /
@@ -20,7 +20,7 @@ HEALTHCHECK --interval=5s --timeout=10s --retries=3 --start-period=10s CMD ["/no
 
 COPY --from=algod --chown=0:0 /node/bin/algod /node/bin/algod
 COPY --from=algod --chown=0:0 /node/bin/goal /node/bin/goal
-COPY --from=urtho --chown=0:0 /node/node_exporter /node/bin/node_exporter
+COPY --from=algorand --chown=0:0 /root/node/node_exporter /node/bin/node_exporter
 COPY --from=builder /build/ /node/bin/
 COPY configuration /algod/configuration
 
