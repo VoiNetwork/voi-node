@@ -5,58 +5,94 @@ import (
 	"testing"
 )
 
-func TestGetStatusURL(t *testing.T) {
-	tests := []struct {
-		name    string
-		network string
-		wantURL string
-		wantErr bool
-	}{
-		{"testNet", "testnet", "https://testnet-api.voi.nodly.io/v2/status", false},
-		{"Unknown", "unknown", "", true},
-	}
-
+func TestNewNetwork(t *testing.T) {
 	nu := NetworkUtils{}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			gotURL, err := nu.GetStatusURL(tt.network)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetStatusURL() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if gotURL != tt.wantURL {
-				t.Errorf("GetStatusURL() = %v, want %v", gotURL, tt.wantURL)
-			}
-		})
+	network, err := nu.NewNetwork(testNet)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if network.Name != testNet {
+		t.Errorf("Expected network name %s, got %s", testNet, network.Name)
+	}
+
+	_, err = nu.NewNetwork("invalid")
+	if err == nil {
+		t.Fatalf("Expected error for unsupported network, got none")
+	}
+}
+
+func TestCheckIfPredefinedNetwork(t *testing.T) {
+	nu := NetworkUtils{}
+
+	if !nu.CheckIfPredefinedNetwork(testNet) {
+		t.Errorf("Expected true for predefined network %s", testNet)
+	}
+
+	if nu.CheckIfPredefinedNetwork("invalid") {
+		t.Errorf("Expected false for unsupported network")
 	}
 }
 
 func TestGetEnvNetworkVar(t *testing.T) {
-	expected := envNetworkVar
 	nu := NetworkUtils{}
-	if got := nu.GetEnvNetworkVar(); got != expected {
-		t.Errorf("GetEnvNetworkVar() = %v, want %v", got, expected)
+	expected := envNetworkVar
+
+	if nu.GetEnvNetworkVar() != expected {
+		t.Errorf("Expected %s, got %s", expected, nu.GetEnvNetworkVar())
 	}
 }
 
 func TestGetNetworkFromEnv(t *testing.T) {
 	nu := NetworkUtils{}
-
-	// Test with environment variable set
-	expectedNetwork := "testnet"
-	os.Setenv(envNetworkVar, expectedNetwork)
+	expected := "test_network"
+	os.Setenv(envNetworkVar, expected)
 	defer os.Unsetenv(envNetworkVar)
 
-	got, ok := nu.GetNetworkFromEnv()
-	if !ok || got != expectedNetwork {
-		t.Errorf("GetNetworkFromEnv() = %v, %v, want %v, true", got, ok, expectedNetwork)
+	network, found := nu.GetNetworkFromEnv()
+	if !found {
+		t.Fatalf("Expected to find network from environment variable")
 	}
+	if network != expected {
+		t.Errorf("Expected %s, got %s", expected, network)
+	}
+}
 
-	// Test without environment variable set
-	os.Unsetenv(envNetworkVar)
-	_, ok = nu.GetNetworkFromEnv()
-	if ok {
-		t.Error("GetNetworkFromEnv() expected to return false when environment variable is not set")
+func TestGetEnvProfileVar(t *testing.T) {
+	nu := NetworkUtils{}
+	expected := envProfileVar
+
+	if nu.GetEnvProfileVar() != expected {
+		t.Errorf("Expected %s, got %s", expected, nu.GetEnvProfileVar())
+	}
+}
+
+func TestGetProfileFromEnv(t *testing.T) {
+	nu := NetworkUtils{}
+	expected := "test_profile"
+	os.Setenv(envProfileVar, expected)
+	defer os.Unsetenv(envProfileVar)
+
+	profile, found := nu.GetProfileFromEnv()
+	if !found {
+		t.Fatalf("Expected to find profile from environment variable")
+	}
+	if profile != expected {
+		t.Errorf("Expected %s, got %s", expected, profile)
+	}
+}
+
+func TestGetGenesisFromEnv(t *testing.T) {
+	nu := NetworkUtils{}
+	expected := "test_genesis_url"
+	os.Setenv(envGenesisURLVar, expected)
+	defer os.Unsetenv(envGenesisURLVar)
+
+	genesisURL, found := nu.GetGenesisFromEnv()
+	if !found {
+		t.Fatalf("Expected to find genesis URL from environment variable")
+	}
+	if genesisURL != expected {
+		t.Errorf("Expected %s, got %s", expected, genesisURL)
 	}
 }

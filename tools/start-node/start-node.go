@@ -13,6 +13,7 @@ const (
 	algodDataDir  = "/algod/data"
 	algodCmd      = "/node/bin/algod"
 	catchupCmd    = "/node/bin/catch-catchpoint"
+	goalCmd       = "/node/bin/goal"
 )
 
 var network string
@@ -21,7 +22,7 @@ var overwriteConfig bool
 
 func init() {
 	flag.StringVar(&network, "network", "testnet", "Specify the network (testnet)")
-	flag.StringVar(&profile, "profile", "relay", "Specify the profile (archiver, relay)")
+	flag.StringVar(&profile, "profile", "relay", "Specify the profile (archiver, relay, developer)")
 	flag.BoolVar(&overwriteConfig, "overwrite-config", true, "Specify whether to overwrite the configuration files (true, false)")
 }
 
@@ -51,30 +52,58 @@ func main() {
 	cu.HandleConfiguration(urlSet, genesisURL, network, profile, overwriteConfig, algodDataDir)
 
 	pu := utils.ProcessUtils{}
-
-	// Start algod
-	done := pu.StartProcess(algodCmd, "-d", algodDataDir)
+	var done <-chan error
 
 	envVar := os.Getenv(envCatchupVar)
-	if envVar != "0" && !urlSet {
-		retryCount := 0
-		maxRetries := 10
-		for retryCount < maxRetries {
-			_, err := pu.ExecuteCommand(catchupCmd)
-			if err == nil {
-				break
-			}
-			retryCount++
-			log.Printf("Retry %d/%d: Failed to execute catchup command, retrying in 5 seconds...", retryCount, maxRetries)
-			time.Sleep(5 * time.Second)
+	if profile == "archiver" && envVar != "0" {
+		predefinedNetwork, err := nu.NewNetwork(network)
+		if err != nil {
+			log.Fatalf("Error: %v", err)
 		}
-		if retryCount == maxRetries {
-			log.Printf("Failed to execute catchup command after %d retries", maxRetries)
-			return
+		niou := utils.NetworkIOUtils{}
+		srvRecords, err := niou.LookupSRVRecords(predefinedNetwork)
+		if err != nil {
+			log.Fatalf("Error: %v", err)
 		}
+
+		log.Printf("Catching up using direct archiver connection to %s: ", srvRecords[0])
+		done = pu.StartProcess(goalCmd, "node", "start", "-d", algodDataDir, "-p", srvRecords[0])
 	} else {
-		log.Printf("Skipping catchup execution as %s is set to 0", envCatchupVar)
+
+		done = pu.StartProcess(algodCmd, "-d", algodDataDir)
+
+		if envVar != "0" && !urlSet && profile != "archiver" {
+			retryCount := 0
+			maxRetries := 10
+			for retryCount < maxRetries {
+				_, err := pu.ExecuteCommand(catchupCmd)
+				if err == nil {
+					break
+				}
+				retryCount++
+				log.Printf("Retry %d/%d: Failed to execute catchup command, retrying in 5 seconds...", retryCount, maxRetries)
+				time.Sleep(5 * time.Second)
+			}
+			if retryCount == maxRetries {
+				log.Printf("Failed to execute catchup command after %d retries", maxRetries)
+				return
+			}
+		} else {
+			log.Printf("Skipping catchup execution as %s is set to 0", envCatchupVar)
+		}
 	}
 
-	<-done
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case err := <-done:
+			if err != nil {
+				log.Fatalf("Process finished with error: %v", err)
+			}
+		case <-ticker.C:
+			// do nothing
+		}
+	}
 }

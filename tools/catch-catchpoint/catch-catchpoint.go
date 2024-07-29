@@ -22,10 +22,10 @@ const (
 	httpRetryAttempts = 10
 )
 
-var network string
+var networkArgument string
 
 func init() {
-	flag.StringVar(&network, "network", "testnet", "Specify the network (testnet)")
+	flag.StringVar(&networkArgument, "network", "testnet", "Specify the network (testnet)")
 }
 
 func getLastNodeRound(pu utils.ProcessUtils) (int, error) {
@@ -49,14 +49,16 @@ func main() {
 	envNetwork := os.Getenv(envNetworkVar)
 	if envNetwork != "" {
 		log.Printf("Using network from environment variable: %s", envNetwork)
-		network = envNetwork
+		networkArgument = envNetwork
 	}
 
-	log.Printf("Catchup on network: %s", network)
+	nu := utils.NetworkUtils{}
+	network, err := nu.NewNetwork(networkArgument)
+
+	log.Printf("Catchup on network: %s", network.Name)
 
 	pu := utils.ProcessUtils{}
-	nu := utils.NetworkUtils{}
-	statusURL, err := nu.GetStatusURL(network)
+	statusURL := network.StatusURL
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}
@@ -126,13 +128,13 @@ func main() {
 			return
 		}
 
-		log.Printf("Last node round: %d, Last network round: %d\n", lastNodeRound, lastNetworkRound)
+		log.Printf("Last node round: %d, Last networkArgument round: %d\n", lastNodeRound, lastNetworkRound)
 
 		if (lastNodeRound) > lastNetworkRound-1000 {
 			log.Print("Current round is not that far behind (if at all), skipping catchup")
 			return
 		} else if catchpointRound < lastNodeRound-1000 {
-			log.Print("Catchpoint round is behind the network, skipping catchup")
+			log.Print("Catchpoint round is behind the networkArgument, skipping catchup")
 			return
 		}
 

@@ -19,11 +19,11 @@ type ConfigUtils struct{}
 
 func (cu ConfigUtils) HandleConfiguration(urlSet bool, genesisURL string, network string, profile string, overwriteConfig bool, algodDataDir string) {
 	fu := FileUtils{}
-	nu := NetworkUtils{}
+	niou := NetworkIOUtils{}
 
 	if urlSet {
 		log.Printf("Using genesis and configuration URLs from environment variables: %s", genesisURL)
-		if err := nu.DownloadNetworkConfiguration(genesisURL, algodDataDir); err != nil {
+		if err := niou.DownloadNetworkConfiguration(genesisURL, algodDataDir); err != nil {
 			fmt.Printf("Failed to download network configuration: %v", err)
 			os.Exit(1)
 		}

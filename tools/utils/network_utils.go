@@ -2,42 +2,37 @@ package utils
 
 import (
 	"fmt"
-	"io"
 	"log"
-	"net"
-	"net/http"
 	"os"
-	"path/filepath"
-	"time"
 )
 
 // TODO: Separate network io from blockchain network
 
 const (
-	// TODO: Create an enum to hold predefined network values
 	testNet          = "testnet"
 	envNetworkVar    = "VOINETWORK_NETWORK"
 	envGenesisURLVar = "VOINETWORK_GENESIS"
 	envProfileVar    = "VOINETWORK_PROFILE"
 )
 
-type NetworkUtils struct{}
-
-func (nu NetworkUtils) IsPortOpen(address string) bool {
-	conn, err := net.DialTimeout("tcp", address, 5*time.Second)
-	if err != nil {
-		return false
-	}
-	conn.Close()
-	return true
+type Network struct {
+	Name        string
+	StatusURL   string
+	ArchivalDNS string
 }
 
-func (nu NetworkUtils) GetStatusURL(network string) (string, error) {
-	switch network {
+type NetworkUtils struct{}
+
+func (nu NetworkUtils) NewNetwork(name string) (Network, error) {
+	switch name {
 	case testNet:
-		return "https://testnet-api.voi.nodly.io/v2/status", nil
+		return Network{
+			Name:        testNet,
+			StatusURL:   "https://testnet-api.voi.nodly.io/v2/status",
+			ArchivalDNS: "voitest.voi.network",
+		}, nil
 	default:
-		return "", fmt.Errorf("unsupported network: %s", network)
+		return Network{}, fmt.Errorf("unsupported network: %s", name)
 	}
 }
 
@@ -83,44 +78,4 @@ func (nu NetworkUtils) GetGenesisFromEnv() (string, bool) {
 		return genesisURL, true
 	}
 	return "", false
-}
-
-func (nu NetworkUtils) DownloadNetworkConfiguration(genesisURL, algodDataDir string) error {
-	if err := downloadFile(genesisURL, filepath.Join(algodDataDir, "genesis.json")); err != nil {
-		return fmt.Errorf("failed to download genesis.json: %w", err)
-	}
-
-	return nil
-}
-
-func downloadFile(url, destFile string) error {
-	resp, err := http.Get(url)
-	if err != nil {
-		return fmt.Errorf("error making GET request to %s: %w", url, err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("received non-200 response code: %d", resp.StatusCode)
-	}
-
-	fu := FileUtils{}
-	err = fu.EnsureDirExists(destFile)
-	if err != nil {
-		return err
-	}
-
-	out, err := os.Create(destFile)
-	if err != nil {
-		return fmt.Errorf("error creating file %s: %w", destFile, err)
-	}
-	defer out.Close()
-
-	_, err = io.Copy(out, resp.Body)
-	if err != nil {
-		return fmt.Errorf("error writing data to %s: %w", destFile, err)
-	}
-
-	log.Printf("Successfully downloaded %s to %s", url, destFile)
-	return nil
 }
