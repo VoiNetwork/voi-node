@@ -54,8 +54,8 @@ func main() {
 	pu := utils.ProcessUtils{}
 	var done <-chan error
 
-	envVar := os.Getenv(envCatchupVar)
-	if profile == "archiver" && envVar != "0" {
+	envCatchup := os.Getenv(envCatchupVar)
+	if profile == "archiver" && envCatchup != "0" {
 		predefinedNetwork, err := nu.NewNetwork(network)
 		if err != nil {
 			log.Fatalf("Error: %v", err)
@@ -72,7 +72,7 @@ func main() {
 
 		done = pu.StartProcess(algodCmd, "-d", algodDataDir)
 
-		if envVar != "0" && !urlSet && profile != "archiver" {
+		if envCatchup != "0" && !urlSet && profile != "archiver" {
 			retryCount := 0
 			maxRetries := 10
 			for retryCount < maxRetries {
