@@ -2,9 +2,10 @@ name: build
 
 on:
   pull_request:
-    branches: [ main ]
   push:
-    branches: [ main ]
+    tags:
+      - '*'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,9 +18,9 @@ jobs:
         platform: [ linux/amd64, linux/arm64 ]
     steps:
       - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        uses: actions/checkout@v4
       - name: Setup Go
-        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32
+        uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
           cache: true
@@ -31,9 +32,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           version: latest
-      - name: Build Docker Image
-        run: docker buildx build --platform ${{ matrix.platform }} -t voi-node:${{ matrix.platform }} --load .
-      - name: Run Tests in Docker Container
-        run: docker run --rm voi-node:${{ matrix.platform }} make test
-      - name: Build all
-        run: docker run --rm voi-node:${{ matrix.platform }} make all
+      - name: Run Bake
+        run: docker buildx bake --file bake.hcl --set *.platform=${{ matrix.platform }} --load
+      - name: Run Unit Tests
+        run: make test
