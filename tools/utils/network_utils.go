@@ -10,6 +10,7 @@ import (
 
 const (
 	testNet          = "testnet"
+	betaNet          = "betanet"
 	envNetworkVar    = "VOINETWORK_NETWORK"
 	envGenesisURLVar = "VOINETWORK_GENESIS"
 	envProfileVar    = "VOINETWORK_PROFILE"
@@ -30,6 +31,12 @@ func (nu NetworkUtils) NewNetwork(name string) (Network, error) {
 			Name:        testNet,
 			StatusURL:   "https://testnet-api.voi.nodly.io/v2/status",
 			ArchivalDNS: "voitest.voi.network",
+		}, nil
+	case betaNet:
+		return Network{
+			Name:        betaNet,
+			StatusURL:   "https://betanet-api.voi.nodly.io/v2/status",
+			ArchivalDNS: "betanet-voi.net",
 		}, nil
 	default:
 		return Network{}, fmt.Errorf("unsupported network: %s", name)
