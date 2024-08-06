@@ -1,31 +1,32 @@
+variable "DEFAULT_TAG" {
+  default = "app:local"
+}
+
+// Special target: https://github.com/docker/metadata-action#bake-definition
+target "docker-metadata-action" {
+  tags = ["${DEFAULT_TAG}"]
+}
+
+// Default target if none specified
 group "default" {
-  targets = ["build", "test", "all"]
+  targets = ["image-local"]
 }
 
-target "build" {
-  platforms = ["linux/amd64", "linux/arm64"]
-  tags      = ["voi-node"]
-  context   = "."
-  dockerfile = "Dockerfile"
+target "image" {
+  inherits = ["docker-metadata-action"]
 }
 
-target "test" {
-  inherits = ["build"]
-  args = {
-    TARGET = "test"
-  }
-  commands = [
-    "make test"
-  ]
+target "image-local" {
+  inherits = ["image"]
+  output = ["type=docker"]
 }
 
-target "all" {
-  inherits = ["build"]
-  args = {
-    TARGET = "all"
-  }
-
-  commands = [
-    "make all"
+target "image-all" {
+  inherits = ["image"]
+  platforms = [
+    "linux/amd64",
+    "linux/arm/v6",
+    "linux/arm/v7",
+    "linux/arm64"
   ]
 }
