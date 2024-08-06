@@ -1,0 +1,20 @@
+{
+  "Version": 33,
+  "AccountsRebuildSynchronousMode": 0,
+  "Archival": true,
+  "BaseLoggerDebugLevel": 1,
+  "EnableGossipService": false,
+  "EnableLedgerService": true,
+  "EnableBlockService": true,
+  "CatchpointFileHistoryLength": 3,
+  "CadaverSizeTarget": 0,
+  "DNSBootstrapID": "<network>.betanet-voi.network?backup=<network>.betanet-voi.net&dedup=<name>.betanet-voi.(net|network)",
+  "EnableProfiler": true,
+  "GossipFanout": 8,
+  "LogSizeLimit": 0,
+  "CatchupParallelBlocks": 128,
+  "MaxAPIResourcesPerAccount": 1000000,
+  "MaxConnectionsPerIP": 2,
+  "IncomingConnectionsLimit": 50,
+  "EnableMetricReporting": true
+}

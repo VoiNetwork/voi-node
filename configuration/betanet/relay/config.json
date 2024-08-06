@@ -1,0 +1,15 @@
+{
+  "Version": 33,
+  "Archival": false,
+  "GossipFanout": 8,
+  "NetAddress": "0.0.0.0:8080",
+  "MaxConnectionsPerIP": 2,
+  "IncomingConnectionsLimit": 90,
+  "MaxBlockHistoryLookback": 22000,
+  "CatchpointTracking": 2,
+  "CatchpointFileHistoryLength": 3,
+  "DNSBootstrapID": "<network>.betanet-voi.network?backup=<network>.betanet-voi.net&dedup=<name>.betanet-voi.(net|network)",
+  "EnableMetricReporting": true,
+  "EnableLedgerService": true,
+  "EnableBlockService": true
+}
