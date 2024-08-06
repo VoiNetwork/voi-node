@@ -1,6 +1,6 @@
 ARG BASE_ALGORAND_VERSION="3.25.0"
 ARG TARGETPLATFORM
-FROM --platform=$TARGETPLATFORM algorand/stable:${BASE_ALGORAND_VERSION} AS algorand
+FROM algorand/stable:${BASE_ALGORAND_VERSION} AS algorand
 
 FROM --platform=$BUILDPLATFORM golang:1.22 AS builder
 WORKDIR /
@@ -11,7 +11,7 @@ COPY go.mod /
 RUN echo "Building for $TARGETPLATFORM"
 RUN GOOS=linux GOARCH=$(echo $TARGETPLATFORM | cut -d'/' -f2) make all
 
-FROM --platform=$TARGETPLATFORM gcr.io/distroless/cc AS distroless
+FROM gcr.io/distroless/cc AS distroless
 ENV TELEMETRY_NAME="${HOSTNAME}"
 ENV VOINETWORK_PROFILE="${VOINETWORK_PROFILE}"
 ENV VOINETWORK_NETWORK="${VOINETWORK_NETWORK}"
