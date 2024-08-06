@@ -8,7 +8,8 @@ COPY ./tools/ /tools
 COPY Makefile /
 COPY go.mod /
 
-RUN make all
+RUN echo "Building for $TARGETPLATFORM"
+RUN GOOS=linux GOARCH=$(echo $TARGETPLATFORM | cut -d'/' -f2) make all
 
 FROM gcr.io/distroless/cc AS distroless
 ENV TELEMETRY_NAME="${HOSTNAME}"
