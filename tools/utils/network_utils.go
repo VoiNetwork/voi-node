@@ -47,6 +47,8 @@ func (nu NetworkUtils) CheckIfPredefinedNetwork(network string) bool {
 	switch network {
 	case testNet:
 		return true
+	case betaNet:
+		return true
 	default:
 		return false
 	}
