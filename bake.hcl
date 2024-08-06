@@ -25,6 +25,13 @@ target "image-all" {
   inherits = ["image"]
   platforms = [
     "linux/amd64",
+  ]
+}
+
+target "participation-image-all" {
+  inherits = ["image"]
+  platforms = [
+    "linux/amd64",
     "linux/arm64"
   ]
 }
