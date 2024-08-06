@@ -135,13 +135,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create manifest list and push
-        if: env.PUSH_IMAGES == 'true'
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create $(jq -cr '.target."docker-metadata-action".tags | map(select(startswith("${{ env.REGISTRY_IMAGE }}")) | "-t " + .) | join(" ")' /tmp/bake-meta.json) \
             $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
 
       - name: Inspect image
-        if: env.PUSH_IMAGES == 'true'
         run: |
           docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:$(jq -r '.target."docker-metadata-action".args.DOCKER_META_VERSION' /tmp/bake-meta.json)
