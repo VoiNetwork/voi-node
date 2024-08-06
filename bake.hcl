@@ -34,4 +34,5 @@ target "participation-image-all" {
     "linux/amd64",
     "linux/arm64"
   ]
+  dockerfile = "Dockerfile.participation"
 }
