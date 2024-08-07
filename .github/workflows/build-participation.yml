@@ -98,7 +98,7 @@ jobs:
           files: |
             ./bake.hcl
             /tmp/bake-meta.json
-          targets: image
+          targets: participation-image
           set: |
             *.tags=
             *.platform=${{ matrix.platform }}

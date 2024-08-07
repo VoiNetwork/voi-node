@@ -16,6 +16,12 @@ target "image" {
   inherits = ["docker-metadata-action"]
 }
 
+target "participation-image" {
+  inherits = ["image"]
+  context = "."
+  dockerfile = "Dockerfile.participation"
+}
+
 target "image-local" {
   inherits = ["image"]
   output = ["type=docker"]
@@ -34,5 +40,4 @@ target "participation-image-all" {
     "linux/amd64",
     "linux/arm64"
   ]
-  dockerfile = "Dockerfile.participation"
 }
