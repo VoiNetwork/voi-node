@@ -1,0 +1,7 @@
+{
+  "EndpointAddress": "0.0.0.0:8080",
+  "DNSBootstrapID": "<network>.betanet-voi.network?backup=<network>.betanet-voi.net&dedup=<name>.betanet-voi.(network|net)",
+  "EnableCatchupFromArchiveServers": true,
+  "BaseLoggerDebugLevel": 4,
+  "FallbackDNSResolverAddress": "1.1.1.1,8.8.8.8"
+}

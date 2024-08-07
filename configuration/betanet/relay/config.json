@@ -8,7 +8,7 @@
   "MaxBlockHistoryLookback": 22000,
   "CatchpointTracking": 2,
   "CatchpointFileHistoryLength": 3,
-  "DNSBootstrapID": "<network>.betanet-voi.network?backup=<network>.betanet-voi.net&dedup=<name>.betanet-voi.(net|network)",
+  "DNSBootstrapID": "<network>.betanet-voi.network?backup=<network>.betanet-voi.net&dedup=<name>.betanet-voi.(network|net)",
   "EnableMetricReporting": true,
   "EnableLedgerService": true,
   "EnableBlockService": true
