@@ -22,6 +22,8 @@ ENV VOINETWORK_INCOMING_CONNECTIONS_LIMIT="${VOINETWORK_INCOMING_CONNECTIONS_LIM
 
 HEALTHCHECK --interval=5s --timeout=10s --retries=3 --start-period=10s CMD ["/node/bin/algodhealth"]
 
+RUN apt-get update && apt-get dist-upgrade -y && apt install -y jq bc curl
+
 COPY --from=algorand --chown=0:0 /node/bin/algod /node/bin/algod
 COPY --from=algorand --chown=0:0 /node/bin/goal /node/bin/goal
 COPY --from=algorand --chown=0:0 /node/bin/kmd /node/bin/kmd
