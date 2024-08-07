@@ -17,7 +17,7 @@ target "image" {
 }
 
 target "participation-image" {
-  inherits = ["image"]
+  inherits = ["docker-metadata-action"]
   context = "."
   dockerfile = "Dockerfile.participation"
 }
