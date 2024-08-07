@@ -102,7 +102,7 @@ jobs:
           set: |
             *.tags=
             *.platform=${{ matrix.platform }}
-            *.output=type=participation-image,"name=${{ env.REGISTRY_IMAGE }}",push-by-digest=true,name-canonical=true,push=true
+            *.output=type=image,"name=${{ env.REGISTRY_IMAGE }}",push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
         run: |
