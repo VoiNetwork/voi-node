@@ -11,7 +11,7 @@ COPY go.mod /
 RUN echo "Building for $TARGETPLATFORM"
 RUN GOOS=linux GOARCH=$(echo $TARGETPLATFORM | cut -d'/' -f2) make all
 
-FROM gcr.io/distroless/cc AS distroless
+FROM ubuntu:22.04 AS ubuntu
 ENV TELEMETRY_NAME="${HOSTNAME}"
 ENV VOINETWORK_PROFILE="${VOINETWORK_PROFILE}"
 ENV VOINETWORK_NETWORK="${VOINETWORK_NETWORK}"
