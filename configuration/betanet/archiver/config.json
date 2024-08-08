@@ -16,5 +16,8 @@
   "MaxAPIResourcesPerAccount": 1000000,
   "MaxConnectionsPerIP": 2,
   "IncomingConnectionsLimit": 50,
-  "EnableMetricReporting": true
+  "EnableMetricReporting": true,
+  "ColdDataDir": "/algod/data/cold-storage",
+  "StateproofDir": "/algod/data",
+  "CrashDBDir": "/algod/data"
 }
