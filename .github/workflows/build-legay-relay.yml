@@ -1,4 +1,4 @@
-name: build
+name: build-legacy-relay
 
 on:
   push:
