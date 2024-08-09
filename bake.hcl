@@ -22,6 +22,12 @@ target "participation-image" {
   dockerfile = "Dockerfile.participation"
 }
 
+target "legacy-relay-image" {
+  inherits = ["docker-metadata-action"]
+  context = "."
+  dockerfile = "Dockerfile.legacy-relay"
+}
+
 target "image-local" {
   inherits = ["image"]
   output = ["type=docker"]
