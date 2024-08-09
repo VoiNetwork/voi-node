@@ -2,14 +2,13 @@ ARG BASE_ALGORAND_VERSION="3.23.1"
 ARG TARGETPLATFORM
 FROM algorand/stable:${BASE_ALGORAND_VERSION} AS algorand
 
-FROM --platform=$BUILDPLATFORM golang:1.22 AS builder
+FROM golang:1.22 AS builder
 WORKDIR /
 COPY ./tools/ /tools
 COPY Makefile /
 COPY go.mod /
 
-RUN echo "Building for $TARGETPLATFORM"
-RUN GOOS=linux GOARCH=$(echo $TARGETPLATFORM | cut -d'/' -f2) make all
+RUN make all
 
 FROM gcr.io/distroless/cc AS distroless
 ENV TELEMETRY_NAME="${HOSTNAME}"

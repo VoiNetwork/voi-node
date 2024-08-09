@@ -5,5 +5,8 @@ FROM gcr.io/distroless/cc AS distroless
 COPY --from=algorand --chown=0:0 /root/node/algod /node/algod
 COPY --from=algorand --chown=0:0 /root/node/goal /node/goal
 COPY --from=algorand --chown=0:0 /root/node/node_exporter /node/node_exporter
+
 ARG NETWORK="testnet"
 COPY configuration/${NETWORK}/genesis.json /node/data/genesis.json
+
+CMD ["/node/algod"]
