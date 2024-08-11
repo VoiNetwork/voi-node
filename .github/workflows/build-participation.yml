@@ -1,4 +1,4 @@
-name: build
+name: build-participation
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - 'main'
       - 'v[0-9]*'
     tags:
-        - 'v*'
+      - 'v*'
   pull_request:
   workflow_dispatch:
 
 env:
-  REGISTRY_IMAGE: ghcr.io/voinetwork/voi-node
+  REGISTRY_IMAGE: ghcr.io/voinetwork/voi-node-participation
 
 jobs:
   prepare:
@@ -25,7 +25,7 @@ jobs:
       - name: Create matrix
         id: platforms
         run: |
-          echo "matrix=$(docker buildx bake -f ./bake.hcl image-all --print | jq -cr '.target."image-all".platforms')" >>${GITHUB_OUTPUT}
+          echo "matrix=$(docker buildx bake -f ./bake.hcl participation-image-all --print | jq -cr '.target."participation-image-all".platforms')" >>${GITHUB_OUTPUT}
 
       - name: Show matrix
         run: |
@@ -98,7 +98,7 @@ jobs:
           files: |
             ./bake.hcl
             /tmp/bake-meta.json
-          targets: image
+          targets: participation-image
           set: |
             *.tags=
             *.platform=${{ matrix.platform }}
@@ -107,7 +107,7 @@ jobs:
       - name: Export digest
         run: |
           mkdir -p /tmp/digests
-          digest="${{ fromJSON(steps.bake.outputs.metadata).image['containerimage.digest'] }}"
+          digest="${{ fromJSON(steps.bake.outputs.metadata).participation-image['containerimage.digest'] }}"
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: Upload digest

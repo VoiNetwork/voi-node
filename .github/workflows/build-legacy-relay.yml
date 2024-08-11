@@ -1,4 +1,4 @@
-name: build
+name: build-legacy-relay
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - 'main'
       - 'v[0-9]*'
     tags:
-        - 'v*'
+      - 'v*'
   pull_request:
   workflow_dispatch:
 
 env:
-  REGISTRY_IMAGE: ghcr.io/voinetwork/voi-node
+  REGISTRY_IMAGE: ghcr.io/voinetwork/voi-node-legacy-relay
 
 jobs:
   prepare:
@@ -98,7 +98,7 @@ jobs:
           files: |
             ./bake.hcl
             /tmp/bake-meta.json
-          targets: image
+          targets: legacy-relay-image
           set: |
             *.tags=
             *.platform=${{ matrix.platform }}
@@ -107,7 +107,7 @@ jobs:
       - name: Export digest
         run: |
           mkdir -p /tmp/digests
-          digest="${{ fromJSON(steps.bake.outputs.metadata).image['containerimage.digest'] }}"
+          digest="${{ fromJSON(steps.bake.outputs.metadata).legacy-relay-image['containerimage.digest'] }}"
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: Upload digest

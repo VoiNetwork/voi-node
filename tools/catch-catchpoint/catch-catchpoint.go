@@ -128,13 +128,13 @@ func main() {
 			return
 		}
 
-		log.Printf("Last node round: %d, Last networkArgument round: %d\n", lastNodeRound, lastNetworkRound)
+		log.Printf("Last node round: %d, Last network round: %d\n", lastNodeRound, lastNetworkRound)
 
 		if (lastNodeRound) > lastNetworkRound-1000 {
 			log.Print("Current round is not that far behind (if at all), skipping catchup")
 			return
-		} else if catchpointRound < lastNodeRound-1000 {
-			log.Print("Catchpoint round is behind the networkArgument, skipping catchup")
+		} else if catchpointRound <= lastNodeRound-1000 {
+			log.Print("Catchpoint round is behind the network, skipping catchup")
 			return
 		}
 

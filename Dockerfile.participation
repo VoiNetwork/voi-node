@@ -1,6 +1,6 @@
 ARG BASE_ALGORAND_VERSION="3.25.0"
 ARG TARGETPLATFORM
-FROM algorand/stable:${BASE_ALGORAND_VERSION} AS algorand
+FROM algorand/algod:${BASE_ALGORAND_VERSION}-stable AS algorand
 
 FROM golang:1.22 AS builder
 WORKDIR /
@@ -10,7 +10,7 @@ COPY go.mod /
 
 RUN make all
 
-FROM gcr.io/distroless/cc AS distroless
+FROM ubuntu:22.04
 ENV TELEMETRY_NAME="${HOSTNAME}"
 ENV VOINETWORK_PROFILE="${VOINETWORK_PROFILE}"
 ENV VOINETWORK_NETWORK="${VOINETWORK_NETWORK}"
@@ -19,11 +19,15 @@ ENV VOINETWORK_GENESIS="${VOINETWORK_GENESIS}"
 ENV VOINETWORK_CONFIGURATION="${VOINETWORK_CONFIGURATION}"
 ENV VOINETWORK_INCOMING_CONNECTIONS_LIMIT="${VOINETWORK_INCOMING_CONNECTIONS_LIMIT}"
 
+ENV ALGORAND_DATA="/algod/data"
+
 HEALTHCHECK --interval=5s --timeout=10s --retries=3 --start-period=10s CMD ["/node/bin/algodhealth"]
 
-COPY --from=algorand --chown=0:0 /root/node/algod /node/bin/algod
-COPY --from=algorand --chown=0:0 /root/node/goal /node/bin/goal
-COPY --from=algorand --chown=0:0 /root/node/node_exporter /node/bin/node_exporter
+RUN apt-get update && apt-get dist-upgrade -y && apt install -y jq bc curl
+
+COPY --from=algorand --chown=0:0 /node/bin/algod /node/bin/algod
+COPY --from=algorand --chown=0:0 /node/bin/goal /node/bin/goal
+COPY --from=algorand --chown=0:0 /node/bin/kmd /node/bin/kmd
 COPY --from=builder /build/ /node/bin/
 COPY configuration /algod/configuration
 
