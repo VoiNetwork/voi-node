@@ -7,6 +7,9 @@ on:
       - 'v[0-9]*'
     tags:
         - 'v*'
+        - 'mainnet'
+        - 'betanet'
+        - 'testnet'
   pull_request:
   workflow_dispatch:
 
@@ -30,6 +33,14 @@ jobs:
       - name: Show matrix
         run: |
           echo ${{ steps.platforms.outputs.matrix }}
+
+      - name: Set Git Tag as Environment Variable
+        id: git_tag
+        run: echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Set Registry Image Based on Tag
+        if: startsWith(env.GIT_TAG, 'mainnet') || startsWith(env.GIT_TAG, 'betanet') || startsWith(env.GIT_TAG, 'testnet')
+        run: echo "REGISTRY_IMAGE=${{ env.REGISTRY_IMAGE }}-${{ env.GIT_TAG }}" >> $GITHUB_ENV
 
       - name: Docker meta
         id: meta
