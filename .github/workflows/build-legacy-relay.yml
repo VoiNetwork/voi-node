@@ -40,7 +40,7 @@ jobs:
             type=ref,event=branch,pattern=main,latest=true
             type=ref,event=branch,pattern=*,transform=^v?(.*)${1}
             type=ref,event=tag,pattern=*,transform=^v?(.*)${1}
-            type=ref,event=branch,pattern=*
+            type=ref,event=branch,pattern=(.*)
 
       - name: Rename meta bake definition file
         run: |
