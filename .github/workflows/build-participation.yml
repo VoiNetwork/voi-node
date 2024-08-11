@@ -40,6 +40,9 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=semver,pattern={{version}}
             type=ref,event=pr
+            type=ref,event=tag,pattern=mainnet-participation,transform=${{ env.REGISTRY_IMAGE }}-mainnet
+            type=ref,event=tag,pattern=betanet-participation,transform=${{ env.REGISTRY_IMAGE }}-betanet
+            type=ref,event=tag,pattern=testnet-participation,transform=${{ env.REGISTRY_IMAGE }}-testnet
 
       - name: Rename meta bake definition file
         run: |
