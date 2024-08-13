@@ -11,6 +11,7 @@ import (
 const (
 	testNet          = "testnet"
 	betaNet          = "betanet"
+	mainNet          = "mainnet"
 	envNetworkVar    = "VOINETWORK_NETWORK"
 	envGenesisURLVar = "VOINETWORK_GENESIS"
 	envProfileVar    = "VOINETWORK_PROFILE"
@@ -36,7 +37,13 @@ func (nu NetworkUtils) NewNetwork(name string) (Network, error) {
 		return Network{
 			Name:        betaNet,
 			StatusURL:   "https://betanet-api.voi.nodly.io/v2/status",
-			ArchivalDNS: "betanet-voi.net",
+			ArchivalDNS: "betanet-voi.network",
+		}, nil
+	case mainNet:
+		return Network{
+			Name:        mainNet,
+			StatusURL:   "https://mainnet-api.voi.nodly.io/v2/status",
+			ArchivalDNS: "mainnet-voi.network",
 		}, nil
 	default:
 		return Network{}, fmt.Errorf("unsupported network: %s", name)
@@ -48,6 +55,8 @@ func (nu NetworkUtils) CheckIfPredefinedNetwork(network string) bool {
 	case testNet:
 		return true
 	case betaNet:
+		return true
+	case mainNet:
 		return true
 	default:
 		return false
