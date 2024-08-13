@@ -43,10 +43,9 @@ jobs:
         if: startsWith(env.GIT_TAG, 'mainnet') || startsWith(env.GIT_TAG, 'betanet') || startsWith(env.GIT_TAG, 'testnet')
         run: |
           echo "REGISTRY_IMAGE=${{ env.REGISTRY_IMAGE }}-${{ env.GIT_TAG }}" >> $GITHUB_ENV
-          
 
       - name: Set registry_image output
-        run: echo "::set-output name=registry_image::${{ env.REGISTRY_IMAGE }}"
+        run: echo "registry_image=${{ env.REGISTRY_IMAGE }}" >> $GITHUB_OUTPUT
 
       - name: Docker meta
         id: meta
