@@ -1,3 +1,3 @@
 module github.com/voinetwork/voi-node
 
-go 1.22
+go 1.22.5
