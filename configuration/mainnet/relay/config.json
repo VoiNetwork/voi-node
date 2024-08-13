@@ -1,0 +1,15 @@
+{
+  "Version": 33,
+  "Archival": false,
+  "GossipFanout": 8,
+  "NetAddress": "0.0.0.0:8080",
+  "MaxConnectionsPerIP": 2,
+  "IncomingConnectionsLimit": 90,
+  "MaxBlockHistoryLookback": 22000,
+  "CatchpointTracking": 2,
+  "CatchpointFileHistoryLength": 3,
+  "DNSBootstrapID": "<network>.mainnet-voi.network?backup=<network>.mainnet-voi.net&dedup=<name>.mainnet-voi.(network|net)",
+  "EnableMetricReporting": true,
+  "EnableLedgerService": true,
+  "EnableBlockService": true
+}

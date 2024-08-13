@@ -75,6 +75,9 @@ func main() {
 		if envCatchup != "0" && !urlSet && profile != "archiver" {
 			retryCount := 0
 			maxRetries := 10
+
+			// allow algod to start up before executing catchup command
+			time.Sleep(5 * time.Second)
 			for retryCount < maxRetries {
 				_, err := pu.ExecuteCommand(catchupCmd)
 				if err == nil {
