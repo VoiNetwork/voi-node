@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.platforms.outputs.matrix }}
-      registry_image: ${{ steps.set_registry_image.outputs.registry_image }}
+      registry_image: ${{ steps.registry_image.outputs.registry_image }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -45,6 +45,7 @@ jobs:
           echo "REGISTRY_IMAGE=${{ env.REGISTRY_IMAGE }}-${{ env.GIT_TAG }}" >> $GITHUB_ENV
 
       - name: Set registry_image output
+        id: registry_image
         run: echo "registry_image=${{ env.REGISTRY_IMAGE }}" >> $GITHUB_OUTPUT
 
       - name: Docker meta
