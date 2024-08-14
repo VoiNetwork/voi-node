@@ -6,10 +6,10 @@ on:
       - 'main'
       - 'v[0-9]*'
     tags:
-        - 'v*'
-        - 'mainnet'
-        - 'betanet'
-        - 'testnet'
+      - 'v*'
+      - 'mainnet'
+      - 'betanet'
+      - 'testnet'
   pull_request:
   workflow_dispatch:
 
