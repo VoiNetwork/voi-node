@@ -1,4 +1,4 @@
-ARG BASE_ALGORAND_VERSION="3.25.0"
+ARG BASE_ALGORAND_VERSION="3.23.1"
 FROM algorand/stable:${BASE_ALGORAND_VERSION} AS algorand
 
 FROM gcr.io/distroless/cc AS distroless
