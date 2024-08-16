@@ -15,6 +15,7 @@ const (
 	envNetworkVar    = "VOINETWORK_NETWORK"
 	envGenesisURLVar = "VOINETWORK_GENESIS"
 	envProfileVar    = "VOINETWORK_PROFILE"
+	envTelemetryVar  = "VOINETWORK_TELEMETRY_NAME"
 )
 
 type Network struct {
@@ -94,6 +95,18 @@ func (nu NetworkUtils) GetGenesisFromEnv() (string, bool) {
 	genesisURL := os.Getenv(envGenesisURLVar)
 	if genesisURL != "" {
 		return genesisURL, true
+	}
+	return "", false
+}
+
+func (nu NetworkUtils) GetEnvTelemetryVar() string {
+	return envTelemetryVar
+}
+
+func (nu NetworkUtils) GetTelemetryNameFromEnv() (string, bool) {
+	telemetryName := os.Getenv(envTelemetryVar)
+	if telemetryName != "" {
+		return telemetryName, true
 	}
 	return "", false
 }

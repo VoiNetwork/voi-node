@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -61,6 +62,36 @@ func (fu FileUtils) CopyAlgodConfigurationFromFilesystem(network string, profile
 func (fu FileUtils) CopyGenesisConfigurationFromFilesystem(network string, overWriteConfig bool, genesisJSONPathFmt string, algodDataDir string) error {
 	genesisPath := fmt.Sprintf(genesisJSONPathFmt, network)
 	return fu.CopyFile(genesisPath, filepath.Join(algodDataDir, "genesis.json"), overWriteConfig)
+}
+
+func (fu FileUtils) UpdateJSONAttribute(filePath, attributeName string, newValue interface{}) error {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to open JSON file: %v", err)
+	}
+	defer file.Close()
+
+	// Parse the JSON content
+	var data map[string]interface{}
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&data); err != nil {
+		return fmt.Errorf("failed to decode JSON content: %v", err)
+	}
+
+	// Update the specified attribute with the new value
+	data[attributeName] = newValue
+
+	// Write the updated JSON content back to the file
+	updatedData, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return fmt.Errorf("failed to marshal updated JSON content: %v", err)
+	}
+
+	if err := os.WriteFile(filePath, updatedData, 0644); err != nil {
+		return fmt.Errorf("failed to write updated JSON content to file: %v", err)
+	}
+
+	return nil
 }
 
 func fileExists(filePath string) bool {
