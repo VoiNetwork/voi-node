@@ -105,8 +105,13 @@ func (nu NetworkUtils) GetEnvTelemetryVar() string {
 
 func (nu NetworkUtils) GetTelemetryNameFromEnv() (string, bool) {
 	telemetryName := os.Getenv(envTelemetryVar)
+	legacyTelemetryName := os.Getenv("TELEMETRY_NAME")
+
 	if telemetryName != "" {
 		return telemetryName, true
+	}
+	if legacyTelemetryName != "" {
+		return legacyTelemetryName, true
 	}
 	return "", false
 }
