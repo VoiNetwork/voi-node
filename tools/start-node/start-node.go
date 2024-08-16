@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/voinetwork/voi-node/tools/utils"
 	"log"
 	"os"
@@ -9,11 +10,12 @@ import (
 )
 
 const (
-	envCatchupVar = "VOINETWORK_CATCHUP"
-	algodDataDir  = "/algod/data"
-	algodCmd      = "/node/bin/algod"
-	catchupCmd    = "/node/bin/catch-catchpoint"
-	goalCmd       = "/node/bin/goal"
+	envCatchupVar  = "VOINETWORK_CATCHUP"
+	algodDataDir   = "/algod/data"
+	algodLogConfig = "/algod/data/logging.config"
+	algodCmd       = "/node/bin/algod"
+	catchupCmd     = "/node/bin/catch-catchpoint"
+	goalCmd        = "/node/bin/goal"
 )
 
 var network string
@@ -69,6 +71,21 @@ func main() {
 		log.Printf("Catching up using direct archiver connection to %s: ", srvRecords[0])
 		done = pu.StartProcess(goalCmd, "node", "start", "-d", algodDataDir, "-p", srvRecords[0])
 	} else {
+		telemetryName, telemetrySet := nu.GetTelemetryNameFromEnv()
+
+		if telemetrySet && profile == "participation" {
+			fu := utils.FileUtils{}
+			err := fu.UpdateJSONAttribute(algodLogConfig, "Enable", true)
+			if err != nil {
+				fmt.Errorf("failed to enable telemetry: %v", err)
+			}
+			err = fu.UpdateJSONAttribute(algodLogConfig, "Name", telemetryName)
+			if err != nil {
+				fmt.Errorf("failed to set telemetry name: %v", err)
+			}
+
+			log.Printf("Telemetry enabled. Telemetry Name: %s", telemetryName)
+		}
 
 		done = pu.StartProcess(algodCmd, "-d", algodDataDir)
 
