@@ -84,6 +84,8 @@ func main() {
 			if err != nil {
 				log.Fatalf("Failed to set telemetry state: %v", err)
 			}
+
+			log.Printf("Telemetry %s. Telemetry Name: %s", map[bool]string{true: "enabled", false: "disabled"}[telemetrySet], telemetryName)
 		}
 
 		done = pu.StartProcess(algodCmd, "-d", algodDataDir)
