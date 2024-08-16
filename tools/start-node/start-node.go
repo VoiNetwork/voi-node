@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/voinetwork/voi-node/tools/utils"
 	"log"
 	"os"
@@ -10,12 +9,13 @@ import (
 )
 
 const (
-	envCatchupVar  = "VOINETWORK_CATCHUP"
-	algodDataDir   = "/algod/data"
-	algodLogConfig = "/algod/data/logging.config"
-	algodCmd       = "/node/bin/algod"
-	catchupCmd     = "/node/bin/catch-catchpoint"
-	goalCmd        = "/node/bin/goal"
+	envCatchupVar         = "VOINETWORK_CATCHUP"
+	algodDataDir          = "/algod/data"
+	algodLogConfig        = "/algod/data/logging.config"
+	algodLogConfigDefault = "/algod/configuration/logging.config"
+	algodCmd              = "/node/bin/algod"
+	catchupCmd            = "/node/bin/catch-catchpoint"
+	goalCmd               = "/node/bin/goal"
 )
 
 var network string
@@ -46,6 +46,12 @@ func main() {
 		profile = envProfile
 	}
 
+	fu := utils.FileUtils{}
+	err := fu.CopyFile(algodLogConfigDefault, algodLogConfig, false)
+	if err != nil {
+		log.Fatalf("Failed to copy logging configuration: %v", err)
+	}
+
 	log.Printf("Network: %s", network)
 	log.Printf("Profile: %s", profile)
 	log.Printf("Overwrite Config: %t", overwriteConfig)
@@ -73,18 +79,11 @@ func main() {
 	} else {
 		telemetryName, telemetrySet := nu.GetTelemetryNameFromEnv()
 
-		if telemetrySet && profile == "participation" {
-			fu := utils.FileUtils{}
-			err := fu.UpdateJSONAttribute(algodLogConfig, "Enable", true)
+		if profile == "participation" {
+			err := fu.SetTelemetryState(algodLogConfig, telemetryName, telemetrySet)
 			if err != nil {
-				fmt.Errorf("failed to enable telemetry: %v", err)
+				log.Fatalf("Failed to set telemetry state: %v", err)
 			}
-			err = fu.UpdateJSONAttribute(algodLogConfig, "Name", telemetryName)
-			if err != nil {
-				fmt.Errorf("failed to set telemetry name: %v", err)
-			}
-
-			log.Printf("Telemetry enabled. Telemetry Name: %s", telemetryName)
 		}
 
 		done = pu.StartProcess(algodCmd, "-d", algodDataDir)
