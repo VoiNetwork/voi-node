@@ -7,6 +7,7 @@ WORKDIR /
 COPY ./tools/ /tools
 COPY Makefile /
 COPY go.mod /
+COPY go.sum /
 
 RUN make all
 

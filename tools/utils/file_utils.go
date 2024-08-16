@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 	"io"
 	"log"
 	"os"
@@ -91,6 +92,62 @@ func (fu FileUtils) UpdateJSONAttribute(filePath, attributeName string, newValue
 		return fmt.Errorf("failed to write updated JSON content to file: %v", err)
 	}
 
+	return nil
+}
+
+func (fu FileUtils) EnsureGUIDExists(filePath string) error {
+	// Open and read the JSON file
+	file, err := os.Open(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to open JSON file: %v", err)
+	}
+	defer file.Close()
+
+	// Parse the JSON content
+	var data map[string]interface{}
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&data); err != nil {
+		return fmt.Errorf("failed to decode JSON content: %v", err)
+	}
+
+	// Check if the GUID attribute is empty and generate a new GUID if necessary
+	if guid, ok := data["GUID"].(string); ok && guid == "" {
+		newGUID := uuid.New().String()
+		data["GUID"] = newGUID
+	}
+
+	// Write the updated JSON content back to the file
+	updatedData, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return fmt.Errorf("failed to marshal updated JSON content: %v", err)
+	}
+
+	if err := os.WriteFile(filePath, updatedData, 0644); err != nil {
+		return fmt.Errorf("failed to write updated JSON content to file: %v", err)
+	}
+
+	return nil
+}
+
+func (fu FileUtils) SetTelemetryState(filePath, telemetryName string, enabled bool) error {
+	err := fu.UpdateJSONAttribute(filePath, "Enable", enabled)
+	if err != nil {
+		log.Printf("failed to set telemetry enabled state: %v", err)
+		return err
+	}
+	err = fu.UpdateJSONAttribute(filePath, "Name", telemetryName)
+	if err != nil {
+		log.Printf("failed to set telemetry name: %v", err)
+		return err
+	}
+
+	err = fu.EnsureGUIDExists(filePath)
+	if err != nil {
+		log.Printf("failed to ensure GUID exists: %v", err)
+		return err
+	}
+
+	log.Printf("Telemetry %s. Telemetry Name: %s", map[bool]string{true: "enabled", false: "disabled"}[enabled], telemetryName)
 	return nil
 }
 

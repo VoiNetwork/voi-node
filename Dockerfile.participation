@@ -7,6 +7,7 @@ WORKDIR /
 COPY ./tools/ /tools
 COPY Makefile /
 COPY go.mod /
+COPY go.sum /
 
 RUN make all
 
@@ -31,5 +32,6 @@ COPY --from=algorand --chown=0:0 /node/bin/kmd /node/bin/kmd
 COPY --from=algorand --chown=0:0 /node/bin/diagcfg /node/bin/diagcfg
 COPY --from=builder /build/ /node/bin/
 COPY configuration /algod/configuration
+COPY configuration/logging.config /algod/data/logging.config
 
 CMD ["/node/bin/start-node"]
