@@ -132,22 +132,18 @@ func (fu FileUtils) EnsureGUIDExists(filePath string) error {
 func (fu FileUtils) SetTelemetryState(filePath, telemetryName string, enabled bool) error {
 	err := fu.UpdateJSONAttribute(filePath, "Enable", enabled)
 	if err != nil {
-		log.Printf("failed to set telemetry enabled state: %v", err)
-		return err
+		return fmt.Errorf("failed to set telemetry enabled state: %v", err)
 	}
 	err = fu.UpdateJSONAttribute(filePath, "Name", telemetryName)
 	if err != nil {
-		log.Printf("failed to set telemetry name: %v", err)
-		return err
+		return fmt.Errorf("failed to set telemetry name: %v", err)
 	}
 
 	err = fu.EnsureGUIDExists(filePath)
 	if err != nil {
-		log.Printf("failed to ensure GUID exists: %v", err)
-		return err
+		return fmt.Errorf("failed to ensure GUID exists: %v", err)
 	}
 
-	log.Printf("Telemetry %s. Telemetry Name: %s", map[bool]string{true: "enabled", false: "disabled"}[enabled], telemetryName)
 	return nil
 }
 
