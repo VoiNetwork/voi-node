@@ -7,6 +7,8 @@ run a Voi node.
 
 - Relay node
 - Archiver node
+- Developer node
+- Participation node
 
 Node type will default to 'relay' if not specified.
 Node configuration will use testnet defaults unless otherwise provided at image build time.
