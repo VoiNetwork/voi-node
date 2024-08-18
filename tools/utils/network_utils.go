@@ -9,13 +9,14 @@ import (
 // TODO: Separate network io from blockchain network
 
 const (
-	testNet          = "testnet"
-	betaNet          = "betanet"
-	mainNet          = "mainnet"
-	envNetworkVar    = "VOINETWORK_NETWORK"
-	envGenesisURLVar = "VOINETWORK_GENESIS"
-	envProfileVar    = "VOINETWORK_PROFILE"
-	envTelemetryVar  = "VOINETWORK_TELEMETRY_NAME"
+	testNet            = "testnet"
+	betaNet            = "betanet"
+	mainNet            = "mainnet"
+	envNetworkVar      = "VOINETWORK_NETWORK"
+	envGenesisURLVar   = "VOINETWORK_GENESIS"
+	envProfileVar      = "VOINETWORK_PROFILE"
+	envTelemetryVar    = "VOINETWORK_TELEMETRY_NAME"
+	envOverwriteConfig = "VOINETWORK_OVERWRITE_CONFIG"
 )
 
 type Network struct {
@@ -114,4 +115,19 @@ func (nu NetworkUtils) GetTelemetryNameFromEnv() (string, bool) {
 		return legacyTelemetryName, true
 	}
 	return "", false
+}
+
+func (nu NetworkUtils) GetEnvOverwriteConfig() string {
+	return envOverwriteConfig
+}
+
+func (nu NetworkUtils) GetOverwriteConfigFromEnv() (bool, bool) {
+	overwriteConfig := os.Getenv(envOverwriteConfig)
+	if overwriteConfig == "true" {
+		return true, true
+	}
+	if overwriteConfig == "false" {
+		return false, true
+	}
+	return false, false
 }

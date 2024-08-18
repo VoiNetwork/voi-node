@@ -39,11 +39,16 @@ func main() {
 		network = envNetwork
 	}
 
-	genesisURL, urlSet := nu.GetGenesisFromEnv()
+	genesisURL, genesisUrlSet := nu.GetGenesisFromEnv()
 
 	envProfile, profileSet := nu.GetProfileFromEnv()
 	if profileSet {
 		profile = envProfile
+	}
+
+	envOverwriteConfig, overwriteConfigSet := nu.GetOverwriteConfigFromEnv()
+	if overwriteConfigSet {
+		overwriteConfig = envOverwriteConfig
 	}
 
 	fu := utils.FileUtils{}
@@ -57,7 +62,7 @@ func main() {
 	log.Printf("Overwrite Config: %t", overwriteConfig)
 
 	cu := utils.ConfigUtils{}
-	cu.HandleConfiguration(urlSet, genesisURL, network, profile, overwriteConfig, algodDataDir)
+	cu.HandleConfiguration(genesisUrlSet, genesisURL, network, profile, overwriteConfig, algodDataDir)
 
 	pu := utils.ProcessUtils{}
 	var done <-chan error
@@ -90,7 +95,7 @@ func main() {
 
 		done = pu.StartProcess(algodCmd, "-d", algodDataDir)
 
-		if envCatchup != "0" && !urlSet && profile != "archiver" {
+		if envCatchup != "0" && !genesisUrlSet && profile != "archiver" {
 			retryCount := 0
 			maxRetries := 10
 
