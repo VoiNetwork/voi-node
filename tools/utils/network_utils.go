@@ -44,7 +44,7 @@ func (nu NetworkUtils) NewNetwork(name string) (Network, error) {
 	case mainNet:
 		return Network{
 			Name:        mainNet,
-			StatusURL:   "https://mainnet-api.voi.nodly.io/v2/status",
+			StatusURL:   "https://mainnet-api.voi.nodely.dev/v2/status",
 			ArchivalDNS: "mainnet-voi.network",
 		}, nil
 	default:
