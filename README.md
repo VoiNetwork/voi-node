@@ -30,10 +30,10 @@ This will run a relay node on the testnet network.
 docker run -e VOINETWORK_INCOMING_CONNECTIONS_LIMIT=30 ghcr.io/voinetwork/voi-node:latest 
 ```
 
-### Running with default mainnet
+### Running with default mainnet, and default profile
 
 ```bash
-docker run -e VOINETWORK_NETWORK=testnet ghcr.io/voinetwork/voi-node:latest
+docker run ghcr.io/voinetwork/voi-node:latest
 ```
 
 ### Running with a pre-defined network
