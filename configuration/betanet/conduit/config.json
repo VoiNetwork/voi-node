@@ -1,25 +1,8 @@
 {
   "Version": 33,
+  "EndpointAddress": "0.0.0.0:8080",
   "DNSBootstrapID": "<network>.betanet-voi.network?backup=<network>.betanet-voi.net&dedup=<name>.betanet-voi.(network|net)",
   "CatchupParallelBlocks": 64,
   "MaxAcctLookback": 64,
-  "EnableFollowMode": true,
-  "AccountsRebuildSynchronousMode": 0,
-  "Archival": true,
-  "BaseLoggerDebugLevel": 4,
-  "EndpointAddress": "0.0.0.0:8080",
-  "EnableGossipService": false,
-  "EnableLedgerService": true,
-  "EnableBlockService": true,
-  "CatchpointFileHistoryLength": 3,
-  "CadaverSizeTarget": 0,
-  "GossipFanout": 8,
-  "LogSizeLimit": 1073741824,
-  "MaxAPIResourcesPerAccount": 1000000,
-  "MaxConnectionsPerIP": 2,
-  "IncomingConnectionsLimit": 50,
-  "EnableMetricReporting": true,
-  "ColdDataDir": "/algod/data/cold-storage",
-  "StateproofDir": "/algod/data",
-  "CrashDBDir": "/algod/data"
+  "EnableFollowMode": true
 }
