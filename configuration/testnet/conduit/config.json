@@ -1,8 +1,25 @@
 {
   "Version": 33,
-  "EndpointAddress": "0.0.0.0:8080",
-  "DNSBootstrapID": "<network>.voi.network?backup=<network>.voinetwork.net&dedup=<name>.(voi.*?)\\.(network|net)",
+  "DNSBootstrapID": "<network>.mainnet-voi.network?backup=<network>.mainnet-voi.net&dedup=<name>.mainnet-voi.(network|net)",
   "CatchupParallelBlocks": 64,
   "MaxAcctLookback": 64,
-  "EnableFollowMode": true
+  "EnableFollowMode": true,
+  "AccountsRebuildSynchronousMode": 0,
+  "Archival": true,
+  "BaseLoggerDebugLevel": 4,
+  "EndpointAddress": "0.0.0.0:8080",
+  "EnableGossipService": false,
+  "EnableLedgerService": true,
+  "EnableBlockService": true,
+  "CatchpointFileHistoryLength": 3,
+  "CadaverSizeTarget": 0,
+  "GossipFanout": 8,
+  "LogSizeLimit": 1073741824,
+  "MaxAPIResourcesPerAccount": 1000000,
+  "MaxConnectionsPerIP": 2,
+  "IncomingConnectionsLimit": 50,
+  "EnableMetricReporting": true,
+  "ColdDataDir": "/algod/data/cold-storage",
+  "StateproofDir": "/algod/data",
+  "CrashDBDir": "/algod/data"
 }
