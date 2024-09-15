@@ -1,6 +1,6 @@
 {
   "Version": 33,
-  "DNSBootstrapID": "<network>.mainnet-voi.network?backup=<network>.mainnet-voi.net&dedup=<name>.mainnet-voi.(network|net)",
+  "DNSBootstrapID": "<network>.voi.network?backup=<network>.voinetwork.net&dedup=<name>.(voi.*?)\\.(network|net)",
   "CatchupParallelBlocks": 64,
   "MaxAcctLookback": 64,
   "EnableFollowMode": true,
