@@ -39,13 +39,13 @@ func (nu NetworkUtils) NewNetwork(name string) (Network, error) {
 		return Network{
 			Name:        betaNet,
 			StatusURL:   "https://betanet-api.voi.nodly.io/v2/status",
-			ArchivalDNS: "betanet-voi.network",
+			ArchivalDNS: "voibeta.betanet-voi.network",
 		}, nil
 	case mainNet:
 		return Network{
 			Name:        mainNet,
 			StatusURL:   "https://mainnet-api.voi.nodely.dev/v2/status",
-			ArchivalDNS: "mainnet-voi.network",
+			ArchivalDNS: "voimain.mainnet-voi.network",
 		}, nil
 	default:
 		return Network{}, fmt.Errorf("unsupported network: %s", name)
