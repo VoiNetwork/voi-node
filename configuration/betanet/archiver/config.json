@@ -14,7 +14,7 @@
   "LogSizeLimit": 1073741824,
   "CatchupParallelBlocks": 128,
   "MaxAPIResourcesPerAccount": 1000000,
-  "MaxConnectionsPerIP": 2,
+  "MaxConnectionsPerIP": 4,
   "IncomingConnectionsLimit": 50,
   "EnableMetricReporting": true,
   "ColdDataDir": "/algod/data/cold-storage",
