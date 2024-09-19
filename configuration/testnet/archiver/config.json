@@ -9,7 +9,7 @@
   "EnableBlockService": true,
   "CatchpointFileHistoryLength": 3,
   "CadaverSizeTarget": 0,
-  "DNSBootstrapID": "<network>.betanet-voi.network?backup=<network>.betanet-voi.net&dedup=<name>.betanet-voi.(network|net)",
+  "DNSBootstrapID": "<network>.testnet-voi.network?backup=<network>.testnet-voi.net&dedup=<name>.testnet-voi.(network|net)",
   "GossipFanout": 8,
   "LogSizeLimit": 1073741824,
   "CatchupParallelBlocks": 128,
