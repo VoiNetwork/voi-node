@@ -32,13 +32,13 @@ func (nu NetworkUtils) NewNetwork(name string) (Network, error) {
 	case testNet:
 		return Network{
 			Name:        testNet,
-			StatusURL:   "https://testnet-api.voi.nodly.io/v2/status",
-			ArchivalDNS: "voitest.voi.network",
+			StatusURL:   "https://testnet-api.voi.nodely.io/v2/status",
+			ArchivalDNS: "voitest.testnet-voi.network",
 		}, nil
 	case betaNet:
 		return Network{
 			Name:        betaNet,
-			StatusURL:   "https://betanet-api.voi.nodly.io/v2/status",
+			StatusURL:   "https://betanet-api.voi.nodely.io/v2/status",
 			ArchivalDNS: "voibeta.betanet-voi.network",
 		}, nil
 	case mainNet:

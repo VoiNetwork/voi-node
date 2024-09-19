@@ -1,6 +1,6 @@
 {
   "EndpointAddress": "0.0.0.0:8080",
-  "DNSBootstrapID": "<network>.voi.network?backup=<network>.voinetwork.net&dedup=<name>.(voi.*?)\\.(network|net)",
+  "DNSBootstrapID": "<network>.testnet-voi.network?backup=<network>.testnet-voi.net&dedup=<name>.testnet-voi.(network|net)",
   "EnableCatchupFromArchiveServers": true,
   "BaseLoggerDebugLevel": 4,
   "FallbackDNSResolverAddress": "1.1.1.1,8.8.8.8"

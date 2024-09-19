@@ -8,7 +8,7 @@
   "MaxBlockHistoryLookback": 22000,
   "CatchpointTracking": 2,
   "CatchpointFileHistoryLength": 3,
-  "DNSBootstrapID": "<network>.voi.network?backup=<network>.voinetwork.net&dedup=<name>.(voi.*?)\\.(network|net)",
+  "DNSBootstrapID": "<network>.testnet-voi.network?backup=<network>.testnet-voi.net&dedup=<name>.testnet-voi.(network|net)",
   "EnableMetricReporting": true,
   "EnableLedgerService": true,
   "EnableBlockService": true
