@@ -8,24 +8,22 @@ import (
 	"log"
 	"math"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
 const (
-	envNetworkVar     = "VOINETWORK_NETWORK"
 	goalCmd           = "/node/bin/goal"
 	algodDataDir      = "/algod/data"
 	httpTimeout       = 30 * time.Second
 	httpRetryAttempts = 10
 )
 
-var networkArgument string
+var network string
 
 func init() {
-	flag.StringVar(&networkArgument, "network", "testnet", "Specify the network (testnet)")
+	flag.StringVar(&network, "network", "testnet", "Specify the network (testnet)")
 }
 
 func getLastNodeRound(pu utils.ProcessUtils) (int, error) {
@@ -46,19 +44,21 @@ func getLastNodeRound(pu utils.ProcessUtils) (int, error) {
 
 func main() {
 	flag.Parse()
-	envNetwork := os.Getenv(envNetworkVar)
-	if envNetwork != "" {
-		log.Printf("Using network from environment variable: %s", envNetwork)
-		networkArgument = envNetwork
+	nu := utils.NetworkUtils{}
+	envNetwork, networkSet := nu.GetNetworkFromEnv()
+	if networkSet {
+		network = envNetwork
 	}
 
-	nu := utils.NetworkUtils{}
-	network, err := nu.NewNetwork(networkArgument)
+	preDefinedNetwork, err := nu.NewNetwork(network)
+	if err != nil {
+		log.Fatalf("Unsupported network: %s. Exiting.", network)
+	}
 
-	log.Printf("Catchup on network: %s", network.Name)
+	log.Printf("Catchup on network: %s", preDefinedNetwork.Name)
 
 	pu := utils.ProcessUtils{}
-	statusURL := network.StatusURL
+	statusURL := preDefinedNetwork.StatusURL
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}
