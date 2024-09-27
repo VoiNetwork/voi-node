@@ -71,6 +71,11 @@ func (nu NetworkUtils) GetEnvNetworkVar() string {
 
 func (nu NetworkUtils) GetNetworkFromEnv() (string, bool) {
 	network := os.Getenv(envNetworkVar)
+
+	if network == "testnet-v1.0" {
+		network = testNet
+	}
+
 	if network != "" {
 		log.Printf("Using network from environment variable: %s", network)
 		return network, true
