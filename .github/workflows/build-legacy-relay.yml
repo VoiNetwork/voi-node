@@ -11,6 +11,7 @@ on:
       - 'betanet'
       - 'testnet'
       - 'testnet-v1.0'
+      - 'testnet-v1.1'
   pull_request:
   workflow_dispatch:
 
@@ -41,7 +42,7 @@ jobs:
         run: echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Set Registry Image Based on Tag
-        if: startsWith(env.GIT_TAG, 'mainnet') || startsWith(env.GIT_TAG, 'betanet') || startsWith(env.GIT_TAG, 'testnet') || startsWith(env.GIT_TAG, 'testnet-v1.0')
+        if: startsWith(env.GIT_TAG, 'mainnet') || startsWith(env.GIT_TAG, 'betanet') || startsWith(env.GIT_TAG, 'testnet')
         run: |
           echo "REGISTRY_IMAGE=${{ env.REGISTRY_IMAGE }}-${{ env.GIT_TAG }}" >> $GITHUB_ENV
 
@@ -58,7 +59,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=semver,pattern={{version}}
             type=ref,event=pr
-            type=raw,value=latest,enable=${{ startsWith(env.GIT_TAG, 'mainnet') || startsWith(env.GIT_TAG, 'betanet') || startsWith(env.GIT_TAG, 'testnet') || startsWith(env.GIT_TAG, 'testnet-v1.0') }}
+            type=raw,value=latest,enable=${{ startsWith(env.GIT_TAG, 'mainnet') || startsWith(env.GIT_TAG, 'betanet') || startsWith(env.GIT_TAG, 'testnet') }}
 
       - name: Rename meta bake definition file
         run: |
