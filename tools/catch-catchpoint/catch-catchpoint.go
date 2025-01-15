@@ -120,8 +120,7 @@ func main() {
 		if lastRound, ok := result["last-round"].(float64); ok {
 			lastNetworkRound = int(lastRound)
 		} else {
-			log.Println("last-round not found in the response or is not a float64")
-			return
+			log.Fatalf("last-round not found in the response or is not a float64. %v", lastNetworkRound)
 		}
 
 		log.Printf("Last node round: %d, Last network round: %d\n", lastNodeRound, lastNetworkRound)
@@ -138,7 +137,6 @@ func main() {
 		_, err = pu.ExecuteCommand(goalCmd, "-d", algodDataDir, "node", "catchup", catchpoint)
 		if err != nil {
 			log.Fatalf("Error running command: %v", err)
-			return
 		}
 	} else {
 		log.Print("last-catchpoint not found in the response")
