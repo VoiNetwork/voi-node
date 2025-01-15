@@ -85,8 +85,7 @@ func main() {
 
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Error reading body: %v", err)
-		return
+		log.Fatalf("Error reading body: %v", err)
 	}
 
 	var result map[string]interface{}
@@ -94,14 +93,12 @@ func main() {
 	err = json.Unmarshal(bodyBytes, &result)
 	if err != nil {
 		log.Fatalf("Error unmarshalling JSON: %v", err)
-		return
 	}
 
 	if lastCatchpoint, ok := result["last-catchpoint"]; ok {
 		catchpoint, ok := lastCatchpoint.(string)
 		if !ok {
-			log.Fatal("Error: last-catchpoint is not a string")
-			return
+			log.Fatalf("Error: last-catchpoint is not a string. %v", catchpoint)
 		}
 
 		var catchpointRound int
@@ -109,13 +106,12 @@ func main() {
 		if len(catchpointParts) > 0 {
 			catchpointRound, err = strconv.Atoi(catchpointParts[0])
 			if err != nil {
-				log.Fatal("Error: catchpoint round is not an integer")
-				return
+				log.Fatalf("Error: catchpoint round is not an integer. %v", err)
 			}
 			catchpointRoundStr := strconv.Itoa(catchpointRound)
 			log.Printf("Catchpoint round: %s", catchpointRoundStr)
 		} else {
-			log.Fatal("Error: catchpoint does not contain '#'")
+			log.Fatalf("Error: catchpoint does not contain '#'. %v", catchpointParts)
 		}
 
 		lastNodeRound, _ := getLastNodeRound(pu)
@@ -124,8 +120,7 @@ func main() {
 		if lastRound, ok := result["last-round"].(float64); ok {
 			lastNetworkRound = int(lastRound)
 		} else {
-			log.Println("last-round not found in the response or is not a float64")
-			return
+			log.Fatalf("last-round not found in the response or is not a float64. %v", lastNetworkRound)
 		}
 
 		log.Printf("Last node round: %d, Last network round: %d\n", lastNodeRound, lastNetworkRound)
@@ -142,7 +137,6 @@ func main() {
 		_, err = pu.ExecuteCommand(goalCmd, "-d", algodDataDir, "node", "catchup", catchpoint)
 		if err != nil {
 			log.Fatalf("Error running command: %v", err)
-			return
 		}
 	} else {
 		log.Print("last-catchpoint not found in the response")
