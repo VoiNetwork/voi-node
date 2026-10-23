@@ -17,87 +17,54 @@
       }
     },
     {
-      "addr": "VXBBKQW3UP526OENUZZMF6ULXA3WB32DZJX5KDSNDEOKJASPZRLAYRRVUA",
+      "addr": "W3C5ZWDOEGJAEY42CS2I75CZQPY5DLAEFV3GJD2JO2CRM33EZRTI4X3YNM",
       "comment": "",
       "state": {
         "algo": 150000000000,
         "onl": 1,
-        "sel": "8D2dq2hRVshVSaoqd6vkdK37w3JKWFHcXy42X4j3lzw=",
-        "stprf": "1g0M+AGRZDBk8tHGAE4lfUiWVoJB1EAvI4QbUhv9OfdOamO3Iin/ZRqmBShawwmJwBDiieOGRdPPcb3PC5BoAA==",
-        "vote": "cwwRKOsGh5YR7vgfodjPcvuFB3Me970DH3ZV1Xgk1ZU=",
-        "voteKD": 3163,
-        "voteLst": 10000000
+        "sel": "UcZRm945P2YnWBDtOUCkui+6D41h8BIR/ih5WeJ5hG8=",
+        "stprf": "L+82F45lcUEfTNkdpWxvu3tRjjLYsoamVEaO0HoMv4NVL9bzpCDhKhHsinHJ6iTSaUZ9AnEXieRxrUG2cs8mSQ==",
+        "vote": "d8GB32The68mbGUTHyoK0EBMvR+OVg0tZ5jzhwkH7Rw=",
+        "voteKD": 224,
+        "voteLst": 50000
       }
     },
     {
-      "addr": "F5NOO2CFSSYPJ45OB6QY5IYQJCJYRVUTK3XDQH42N4C6RUFPNDZLPT26CY",
+      "addr": "5O553VGA6IYCDJM36QPURVXBRBFRQYV2VQHD3RZENOE5ZATZUWOSRACTPU",
       "comment": "",
       "state": {
         "algo": 150000000000,
         "onl": 1,
-        "sel": "WcjJCJqUzwcjr9ebMKsBp4rtCOTv2iJC7Ol9w3j+vFA=",
-        "stprf": "Q3zFC3SDv8sW0IcrHNVl9rQ42IOMsI8mnBzyHelpDahKP82CnqoFFIyUl9C36BjLspxF8U863PtWUjVuHf1i4g==",
-        "vote": "ScGIcJJXf3iI2JdlvD211JcwqyphwIZF+iTnFI351Ls=",
-        "voteKD": 3163,
-        "voteLst": 10000000
+        "sel": "0hCTwMFu11zN3qCtCsnjGpV4FdF7VdI786dM5SwZ6Eo=",
+        "stprf": "WQglvGlVwsjl/3Rcd5IKJJ7DAh//4YFR/rv3zH7AAgouBxJfg1Obo8gQlQatZp3sq57wlSyQgVyRnTlUL4szbw==",
+        "vote": "Tsxak4F/VsMkb6srS4fj+h3p4xZi+bzPlBTQmuWyypQ=",
+        "voteKD": 224,
+        "voteLst": 50000
       }
     },
     {
-      "addr": "ZNSGRP5ET5FTFLZ7WT4CDUFDHOCG5EMIU6CK36PDGMX64INYCYN7NMK43U",
+      "addr": "XQRVLHP44HH3YDRC33PQBOMXKCYOG2AZII6ILDIMAWCEBTZOKLAE4QHXWM",
       "comment": "",
       "state": {
         "algo": 150000000000,
         "onl": 1,
-        "sel": "Tv6JM/vz9FUgyHPBQfw8pZG+aWFOpDY6MPjZliOtgzQ=",
-        "stprf": "9cvOiArO+WxIWw33KhP+vxWsfgSr+X+4Zd+jZYrw02aduJf6Lgw26Tm1j4orSQWzVR3IJo5BqhUHLoxw/oRB4A==",
-        "vote": "RV4spvAibSZd1KQDrhT8ajo7++wdjGqFxz/C5CFOvaA=",
-        "voteKD": 3163,
-        "voteLst": 10000000
+        "sel": "F/gDPA+4PhZNOc9XE8NSRRcETbknzHrlGeD82xdpbvQ=",
+        "stprf": "pv1hLHtxbCyicJG+QYTkAYFXQrNDDXzVk3jJaPOS6ExyXvwobR3PrjXmcnZaXZQgol2AcIamsoGZDblsgvv1cQ==",
+        "vote": "VQjfJR6+Fq4Mj5pgEuHZsAiLjh4UHGjs3QZVOaXCvH4=",
+        "voteKD": 224,
+        "voteLst": 50000
       }
     },
     {
-      "addr": "X6Q4PATQ7ZDJUXEOIVZDLKJCRZ7E3MIVUH5KZZAPCFGKN7LRCFYVHNUL3I",
+      "addr": "JED73GSOFMVIHXXYYCBS7PHL6QIOWRRIUGVH6IEWOUIPU4SRQPMKLPQBPY",
       "comment": "",
       "state": {
-        "algo": 150000000000,
-        "onl": 1,
-        "sel": "8Q80CiUtd79p3vOxbI6oCNbs1U0OX9Tc6/VZWxXlr4Q=",
-        "stprf": "cxL3onJ6P/tAu01O3Ail4/AFste2es9s/xCDXqABBF1u19TcIZG1uqIL03SZYJkCebHyFRKBywZz2yeC9s92oQ==",
-        "vote": "T0raBVKr2xa7LJdDzMbeRNQCu8OjQ5zy2YcZET9ql0A=",
-        "voteKD": 3163,
-        "voteLst": 10000000
-      }
-    },
-    {
-      "addr": "QRGCUJUXHOBYYV5ZBUYG3FCK2GWHYFDNYMULB2GPRDXXGJFDRFHDZB6QMY",
-      "comment": "",
-      "state": {
-        "algo": 150000000000,
-        "onl": 1,
-        "sel": "hn51pipgpWTuW9AnvkMb3rHQb5/+Yt/fEM6rrSLCq/E=",
-        "stprf": "bZ3RTx6FagW2pHGF9ohL0MPnLCI3154zhbQEWGoSZiWpnDqbNB0l69lmiiOMfK5RXhtEIywFgo/9eZhjhX4Pcg==",
-        "vote": "IFp5siPU93gblufPESlfEw1v//zskpmY5a6dsilKw0g=",
-        "voteKD": 3163,
-        "voteLst": 10000000
-      }
-    },
-    {
-      "addr": "MBMJ5CPEMOAMJ7YUUFDZKSJ4XTLY5DH553BKHYO7LCZLPUUKEXXWSH3IHE",
-      "comment": "",
-      "state": {
-        "algo": 4999615000000000
-      }
-    },
-    {
-      "addr": "SQJ4LHZ6K2N7RR5I7DGZNU2GEULBMTDATUOOBNAQKG44K2ZBZ66TVLZNV4",
-      "comment": "",
-      "state": {
-        "algo": 4999615000000000
+        "algo": 9999530000000000
       }
     }
   ],
   "fees": "TBEIGCNK4UCN3YDP2NODK3MJHTUZMYS3TABRM2MVSI2MPUR2V36E5JYHSY",
-  "id": "v1.1",
+  "id": "v1.2",
   "network": "voitest",
   "proto": "https://github.com/algorandfoundation/specs/tree/925a46433742afb0b51bb939354bd907fa88bf95",
   "rwd": "UVPIYH5R7F7ZOLRPE2SLGISO4C5Q72DWJGKARZOXF4HIL67IDCFLEWLMUA"
