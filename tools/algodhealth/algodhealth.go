@@ -44,7 +44,9 @@ func createHTTPClient() *http.Client {
 }
 
 func main() {
-	if checkAlgodProcess() || checkAlgodHTTPHealth() {
+	// Check /health first: during catchpoint catchup algod 5.x answers it immediately, while
+	// goal node status blocks past the container healthcheck timeout.
+	if checkAlgodHTTPHealth() || checkAlgodProcess() {
 		hostname, err := os.Hostname()
 		if err != nil {
 			log.Printf("Failed to get hostname: %v", err)
