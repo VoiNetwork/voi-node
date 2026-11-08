@@ -4,7 +4,7 @@
   "Archival": true,
   "BaseLoggerDebugLevel": 3,
   "NetAddress": "0.0.0.0:8080",
-  "EnableGossipService": false,
+  "EnableGossipService": true,
   "EnableLedgerService": true,
   "EnableBlockService": true,
   "CatchpointFileHistoryLength": 3,
